@@ -1,0 +1,38 @@
+.container {
+  width: 80%;
+  height: auto;
+  margin: 0 auto;
+
+  .allfilters {
+    .allcards {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: nowrap;
+      margin: 5px 0px;
+
+      .cards {
+        margin: 0 10px;
+        background-color: aqua;
+      }
+    }
+
+    .filters {
+      border: 1px solid black;
+      margin: 5px 0px;
+      display: flex;
+      justify-content: space-evenly;
+      .datefilter {
+        display: flex;
+        align-items: center;
+      }
+      .resetbtn {
+        display: flex;
+        align-items: center;
+      }
+    }
+  }
+
+  .pagination {
+    background-color: aqua;
+  }
+}

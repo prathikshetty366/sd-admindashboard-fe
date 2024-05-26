@@ -1,0 +1,24 @@
+.card {
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 4px 4px var(--main-color);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 300px;
+  background: dodgerblue;
+  color: white;
+  font-size: larger;
+  margin: 0 10px;
+
+  .titletext {
+    font-family: sans-serif;
+    text-transform: uppercase;
+    margin: 0 auto;
+  }
+  .subtitletext {
+    font-family: sans-serif;
+    text-transform: uppercase;
+    margin: 5px 0px 0px 0px;
+  }
+}
