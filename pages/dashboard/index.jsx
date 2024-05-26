@@ -7,6 +7,7 @@ import DatePickerComponent from "@/components/Datepicker";
 import Dropdown from "@/components/Dropdown";
 import TableComponent from "@/components/TableComponent";
 import PaginationComponent from "@/components/PaginationComponent";
+import Layout from "@/components/Layout/Layout";
 
 const VehicleOptions = [
   { value: "", label: "Select Brand" },
@@ -34,6 +35,7 @@ const data = [
 const Dashboard = () => {
   return (
     <>
+      <Layout>
       <h1>Dashboard</h1>
       <div className={styles.container}>
         <div className={styles.allfilters}>
@@ -76,7 +78,8 @@ const Dashboard = () => {
           <PaginationComponent />
         </div>
         {/* <Pagination /> */}
-      </div>
+        </div>
+      </Layout>
     </>
   );
 };

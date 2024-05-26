@@ -7,6 +7,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Navbar from "@/components/Navbar";
 import Sidebar from "@/components/Sidebar";
+import '../styles/global.css'
 
 function MyApp({ Component, pageProps }) {
   const { pathname } = useRouter();
@@ -20,8 +21,8 @@ function MyApp({ Component, pageProps }) {
           <meta name="viewport" content="width=device-width, initial-scale=1" />
           <link rel="icon" href="/favicon/favicon.ico" />
         </Head>
-        <Navbar />
-        <Sidebar />
+        {/* <Navbar />
+        <Sidebar /> */}
         <Component {...pageProps} />
         <ToastContainer
           position="top-center"
