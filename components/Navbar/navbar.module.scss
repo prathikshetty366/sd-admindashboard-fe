@@ -1,0 +1,22 @@
+.navbar {
+  display: flex;
+}
+
+.logo {
+  width: 100px;
+  height: 50px;
+}
+
+.menu {
+  width: 80%;
+}
+
+.menu ul {
+  max-width: 50%;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.menu_items {
+  list-style: none;
+}
