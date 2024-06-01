@@ -1,16 +1,61 @@
 import React from "react";
-import styles from "./Dropdown.module.scss";
+import PropTypes from "prop-types";
+import Image from "next/image";
+import "./dropdown.scss";
 
-const Dropdown = ({ options, name }) => {
-  return (
-    <select className={styles.dropdown} name={name}>
-      {options.map((option, index) => (
-        <option key={index} value={option.value}>
-          {option.label}
-        </option>
-      ))}
-    </select>
-  );
+function DropdownMenuOptions({ children, onClick, dropDownList, direction, onMouseOver }) {
+    const handleOptionClick = (option, data) => {
+        onClick({ option, data });
+    };
+    return (
+        <div className="dropdown" onMouseOver={onMouseOver}>
+            <button className="dropbtn">{children || "dropdown"}</button>
+            <div
+                className={
+                    direction == "bottomLeft"
+                        ? "dropdownContentLeft"
+                        : "dropdownContent"
+                }
+            >
+                {dropDownList?.map((option, idx) => (
+                    <div
+                        key={option?.id || idx}
+                        onClick={() => {
+                            handleOptionClick({
+                                option: option.name,
+                                id: option.id,
+                                idx: idx,
+                            });
+                        }}
+                    >
+                        <Image src={option.src} height={24}
+                            width={24}
+                            alt='edit icon'
+                        />
+                        <div>
+                            {option.name}
+                        </div>
+                    </div>
+                )) || null}
+            </div>
+        </div>
+    );
+}
+
+DropdownMenuOptions.propTypes = {
+    children: PropTypes.node,
+    onClick: PropTypes.func.isRequired,
+    direction: PropTypes.oneOf(["bottomRight", "bottomLeft"]),
+    dropDownList: PropTypes.arrayOf(
+        PropTypes.shape({
+            name: PropTypes.string.isRequired,
+            id: PropTypes.number.isRequired,
+        })
+    ).isRequired,
 };
 
-export default Dropdown;
+DropdownMenuOptions.defaultProps = {
+    direction: "bottomLeft",
+};
+
+export default DropdownMenuOptions;

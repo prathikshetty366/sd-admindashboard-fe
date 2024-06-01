@@ -1,7 +1,8 @@
 .container {
-  width: 80%;
+  width: 100%;
   height: auto;
   margin: 0 auto;
+  background-color: black;
 
   .allfilters {
     .allcards {
@@ -20,19 +21,28 @@
       border: 1px solid black;
       margin: 5px 0px;
       display: flex;
-      justify-content: space-evenly;
+      justify-content: space-between;
+      margin-top: 20px;
+
       .datefilter {
         display: flex;
         align-items: center;
       }
+
       .resetbtn {
         display: flex;
         align-items: center;
+        .btn{
+          background-color: white;
+          color: black;
+          padding: 15px;
+          border-radius: 16px;
+          outline: none;
+          font-weight: 600;
+          cursor: pointer;
+        }
       }
     }
   }
 
-  .pagination {
-    background-color: aqua;
-  }
 }

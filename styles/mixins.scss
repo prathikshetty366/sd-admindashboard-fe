@@ -1,0 +1,12 @@
+@import "/styles/variables.scss";
+
+// Font mixins
+@mixin font-regular($font-size) {
+  font-size: $font-size;
+  font-weight: 400;
+}
+
+@mixin font-medium($font-size) {
+  font-size: $font-size;
+  font-weight: 500;
+}

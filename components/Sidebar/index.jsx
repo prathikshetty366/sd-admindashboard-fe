@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Button, Container, Row, Col } from "react-bootstrap";
 import styles from "./Sidebar.module.scss";
-import Dashboard from "@/pages/dashboard";
+import Dashboard from "@/pages/bookings";
 
 const Sidebar = () => {
   const [activeComponent, setActiveComponent] = useState("bookings");

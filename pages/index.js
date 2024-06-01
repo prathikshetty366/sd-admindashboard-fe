@@ -2,7 +2,8 @@ import Layout from "@/components/Layout/Layout";
 import React from "react";
 import styles from './root.module.scss'
 import Card from "@/components/Card";
-import Dashboard from "./dashboard";
+import Dashboard from "./bookings";
+import Login from "./login/login";
 // import Cards from "@/components/Cards";
 // import { users } from "./../data/user.json";
 // import TableComponent from "@/components/TableComponent";
@@ -32,36 +33,7 @@ import Dashboard from "./dashboard";
 const app = () => {
   return (
     <>
-      <Dashboard />
-      {/* <Card>
-        <h2>Card Title</h2>
-        <p>Card content goes here.</p>
-      </Card>
-
-      <Input type="email" name="email" placeholder="Email" />
-      <Input type="password" name="password" placeholder="Password" />
-
-      <Checkbox name="terms" label="I agree to the terms" />
-
-      <Dropdown options={dropdownOptions} name="options" />
-
-      <Form
-        onSubmit={(e) => {
-          e.preventDefault();
-          console.log("Form submitted");
-        }}
-      >
-        <Input type="email" name="email" placeholder="Email" />
-        <Input type="password" name="password" placeholder="Password" />
-        <button type="submit">Submit</button>
-      </Form>
-
-      <RadioButton name="gender" value="male" label="Male" />
-      <RadioButton name="gender" value="female" label="Female" />
-
-      <BreadcrumbComponent />
-
-      <SpinnerComponent /> */}
+      <Login /> 
     </>
   );
 };

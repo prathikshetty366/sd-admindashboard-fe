@@ -2,12 +2,24 @@
     width: 100%;
     display: flex;
     flex-direction: column;
-    height: 100vh;
+    height: auto;
+        border: 1px solid red;
+        background-color: black;
 
     .topbar {
         height: 10vh;
         width: 100%;
-        padding-left: 60px;
+        padding-top: 10px;
+            padding-left: 20px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+        
+            h2 {
+                color: grey;
+                padding-right: 20px;
+            }
     }
 
     .content {
@@ -18,17 +30,29 @@
         overflow: hidden;
 
         .sidebar {
-            width: 15%;
+            width: 12%;
             height: 100%;
             display: flex;
             flex-direction: column;
-            align-items: center;
+            gap: 20px;
+                padding-top: 30px;
+                padding-left: 20px;
+            
+                .active {
+                    color: #007bff;
+                    font-weight: bold;
+                }
+            
+                h3 {
+                    color: grey;
+                    cursor: pointer;
+                }
         }
 
         .window {
-            width: 85%;
+            width: 88%;
             height: 100%;
-            background-color: #f8f8fb;
+            background-color: black;
             border-radius: 12px;
             padding: 10px;
             box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;

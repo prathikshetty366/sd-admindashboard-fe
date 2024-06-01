@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./navbar.module.scss";
 import Image from "next/image";
-import { WebImages } from "@/assets/logo";
+import { WebImages } from "@/public/assets/login";
 
 const Navbar = () => {
   return (

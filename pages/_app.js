@@ -7,7 +7,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Navbar from "@/components/Navbar";
 import Sidebar from "@/components/Sidebar";
-import '../styles/global.css'
+import '../styles/global.scss'
 
 function MyApp({ Component, pageProps }) {
   const { pathname } = useRouter();
