@@ -1,0 +1,41 @@
+.dropdown {
+    position: relative;
+    min-width: 300px;
+    outline: none;
+    border: none;
+
+    .selectedOption {
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        cursor: pointer;
+        background-color: #0E0E0E;
+        color: white;
+    }
+
+    .options {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #0E0E0E;
+        color: white;
+        z-index: 999;
+
+        .option {
+            padding: 10px;
+            cursor: pointer;
+
+            &:hover {
+                background-color: #f0f0f0;
+                color: black;
+            }
+
+            &:last-child {
+                border-bottom: none;
+            }
+        }
+    }
+}

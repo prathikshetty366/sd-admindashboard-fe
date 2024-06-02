@@ -1,61 +1,44 @@
-import React from "react";
-import PropTypes from "prop-types";
-import Image from "next/image";
-import "./dropdown.scss";
+import React, { useEffect, useState } from "react";
+import styles from "./dropdown.module.scss";
 
-function DropdownMenuOptions({ children, onClick, dropDownList, direction, onMouseOver }) {
-    const handleOptionClick = (option, data) => {
-        onClick({ option, data });
+const Dropdown = ({ options, onSelect, reset }) => {
+    const [isOpen, setIsOpen] = useState(false);
+    const [selectedOption, setSelectedOption] = useState(null);
+
+    const toggleDropdown = () => {
+        setIsOpen(!isOpen);
     };
+
+    const handleOptionClick = (option) => {
+        setSelectedOption(option.name);
+        onSelect(option.garageId);
+        setIsOpen(false);
+    };
+
+    useEffect(() => {
+        setSelectedOption(null)
+    }, [reset])
+
     return (
-        <div className="dropdown" onMouseOver={onMouseOver}>
-            <button className="dropbtn">{children || "dropdown"}</button>
-            <div
-                className={
-                    direction == "bottomLeft"
-                        ? "dropdownContentLeft"
-                        : "dropdownContent"
-                }
-            >
-                {dropDownList?.map((option, idx) => (
-                    <div
-                        key={option?.id || idx}
-                        onClick={() => {
-                            handleOptionClick({
-                                option: option.name,
-                                id: option.id,
-                                idx: idx,
-                            });
-                        }}
-                    >
-                        <Image src={option.src} height={24}
-                            width={24}
-                            alt='edit icon'
-                        />
-                        <div>
+        <div className={styles.dropdown}>
+            <div className={styles.selectedOption} onClick={toggleDropdown}>
+                {selectedOption || "Select the garage"}
+            </div>
+            {isOpen && (
+                <div className={styles.options}>
+                    {options.map((option, index) => (
+                        <div
+                            key={index}
+                            className={styles.option}
+                            onClick={() => handleOptionClick(option)}
+                        >
                             {option.name}
                         </div>
-                    </div>
-                )) || null}
-            </div>
+                    ))}
+                </div>
+            )}
         </div>
     );
-}
-
-DropdownMenuOptions.propTypes = {
-    children: PropTypes.node,
-    onClick: PropTypes.func.isRequired,
-    direction: PropTypes.oneOf(["bottomRight", "bottomLeft"]),
-    dropDownList: PropTypes.arrayOf(
-        PropTypes.shape({
-            name: PropTypes.string.isRequired,
-            id: PropTypes.number.isRequired,
-        })
-    ).isRequired,
 };
 
-DropdownMenuOptions.defaultProps = {
-    direction: "bottomLeft",
-};
-
-export default DropdownMenuOptions;
+export default Dropdown;

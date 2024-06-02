@@ -6,7 +6,9 @@
   flex-direction: column;
   align-items: center;
   width: 300px;
-  background: dodgerblue;
+  cursor: pointer;
+    background: #12A7F2;
+    opacity: 0.8;
   color: white;
   font-size: larger;
   margin: 0 10px;
@@ -21,4 +23,9 @@
     text-transform: uppercase;
     margin: 5px 0px 0px 0px;
   }
+}
+
+.selected {
+  background-color: #0053F5;
+  opacity: 1;
 }

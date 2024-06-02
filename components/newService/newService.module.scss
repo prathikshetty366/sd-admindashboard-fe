@@ -1,0 +1,156 @@
+.newServiceContainer {
+    color: #333;
+    text-align: center;
+    width: 100%;
+    font-family: 'Arial', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: scroll;
+}
+
+.wrapper {
+    display: flex;
+    width: 800px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background-color: white;
+    padding: 20px 20px;
+    border-radius: 12px;
+    overflow: scroll;
+    min-height: 350px;
+
+    .close {
+        position: fixed;
+        left: 400px;
+        top: 20px;
+        background-color: white;
+        color: black;
+        padding: 15px;
+        border-radius: 16px;
+        outline: none;
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+    /* Add padding for better spacing */
+    .item {
+        margin-bottom: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        align-items: center;
+        width: auto;
+        justify-content: center;
+        overflow: scroll;
+        padding: 20px 20px;
+
+        .label {
+            display: block;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: #333;
+            align-self: flex-start;
+            /* Darker color for text */
+        }
+
+        input {
+            padding: 10px;
+            border: 1px solid #ccc;
+            /* Lighter border color */
+            border-radius: 5px;
+            /* Softer corners */
+            margin-bottom: 10px;
+            width: 200px;
+            max-width: 300px;
+            font-size: 1rem;
+        }
+
+        .slotlabel {
+            position: fixed;
+            top: 10px
+        }
+
+        .vehicleInfo {
+            display: flex;
+            flex-direction: column;
+        }
+
+        div {
+            display: flex;
+            flex-direction: row;
+            gap: 15px;
+        }
+
+        .slotWrapper {
+            display: flex;
+            flex-direction: row;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            flex-direction: row;
+            // flex-wrap: wrap;
+            gap: 20px;
+            width: 100%;
+        }
+
+        li {
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 10px;
+            transition: background-color 0.3s ease;
+            cursor: pointer;
+
+            h5 {
+                margin-bottom: 10px;
+            }
+
+            button {
+                background-color: transparent;
+                border: none;
+                cursor: pointer;
+            }
+        }
+
+        .active {
+            background-color: black;
+            border: none;
+            color: white;
+            font-weight: bold;
+        }
+
+        .btnHolder {
+            position: fixed;
+            bottom: 30px;
+        }
+    }
+}
+
+
+.button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    /* Softer corners */
+    background-color: #007BFF;
+    /* Bootstrap primary color */
+    color: #fff;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+        background-color: #0056b3;
+        /* Darker shade of primary color */
+    }
+}
+
+
+
+/* Removed fancy animations */
