@@ -22,6 +22,8 @@ function NewService({ modalIsOpen, garages, completion }) {
     const [availableSlots, setAvailableSlots] = useState()
     const [selectedDate, setSelectedDate] = useState(null);
     const [selectedSlot, setSelectedSlot] = useState(null);
+    const [otpVerified, setOtpVerified] = useState(false)
+    const [existingVehicles, setExistingVehicles] = useState([])
 
     const customStyles = {
         content: {
@@ -47,8 +49,17 @@ function NewService({ modalIsOpen, garages, completion }) {
     };
 
     const handlePrevStep = () => {
-        setStep(prevStep => prevStep - 1);
+        if (existingVehicles.length) {
+            if (step === 6 || (step === 4 && otpVerified)) {
+                setStep(2);
+            } else {
+                setStep(prevStep => prevStep - 1);
+            }
+        } else {
+            setStep(prevStep => prevStep - 1);
+        }
     };
+
 
     const validatePhoneNumber = (number) => {
         const phoneRegex = /^[0-9]{10}$/;
@@ -86,9 +97,12 @@ function NewService({ modalIsOpen, garages, completion }) {
                     });
                     setCustomerToken(response.data.accessToken);
                     setIsNewUser(response.data.user.isNewUser);
+                    setOtpVerified(true)
+                    setExistingVehicles(response?.data?.vehicle)
                     toast.success('OTP verified successfully.');
-                    handleNextStep();
-                    // setStep(6)
+                    if (!response?.data?.vehicle.length) {
+                        handleNextStep();
+                    }
                 } else {
                     toast.error('Invalid OTP.');
                 }
@@ -219,16 +233,40 @@ function NewService({ modalIsOpen, garages, completion }) {
                             </div>
                         )}
                         {step === 2 && (
+
                             <div className={styles.item}>
-                                <label className={styles.label}>Enter OTP</label>
+                                {!otpVerified ? (
+                                    <>
+                                        <label className={styles.label}>Enter OTP</label>
                                 <input
                                     type="number"
                                     value={otp}
                                     onChange={(e) => setOtp(e.target.value)}
                                 />
+                                    </>
+                                ) : (
+                                    <div className={styles.existingVehicleWrapper}>
+                                        <lable>Choose From Existing Vehicle</lable>
+                                        <div className={styles.existingVehicle}>
+                                            {existingVehicles.map((vehicle) => {
+                                                return <p onClick={() => { setVehicleInfo(vehicle.vehicle); setStep(6) }} key={vehicle.id}>{vehicle.vehicle.licensePlate}</p>
+                                            })}
+                                        </div>
+                                    </div>
+                                )}
+
                                 <div>
                                     <button className={styles.button} onClick={handlePrevStep}>Back</button>
-                                    <button className={styles.button} onClick={handleOtpSubmit}>Next</button>
+                                    {!existingVehicles.length && (
+                                        <button className={styles.button} onClick={handleOtpSubmit}>Next</button>
+
+                                    )}
+                                    {existingVehicles.length && (
+                                        
+                                    <button className={styles.button} onClick={() => setStep(4)}>Add new</button>
+                                    )}
+
+
                                 </div>
                             </div>
                         )}

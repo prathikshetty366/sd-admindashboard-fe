@@ -1,0 +1,75 @@
+.container {
+    font-family: 'Inter';
+    color: white;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+    h3 {
+        margin-top: 30px;
+        opacity: 1;
+        color: #007BFF;
+    }
+
+    .userInfo {
+        width: 1200px;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        padding: 20px 20px;
+        gap: 30px;
+        height: auto;
+        border: 1px solid gray;
+        border-radius: 12px;
+        margin-top: 20px;
+    }
+
+    .vehicleInfo {
+        width: 1200px;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+        padding: 20px 20px;
+        gap: 30px;
+        height: auto;
+        border: 1px solid gray;
+        border-radius: 12px;
+        margin-top: 20px;
+    }
+}
+
+.serviceInfo {
+    width: 1200px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    padding: 20px 20px;
+    gap: 30px;
+    height: auto;
+    border: 1px solid gray;
+    border-radius: 12px;
+    margin-top: 20px;
+
+}
+
+.statusWrapper {
+    width: 1200px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 20px;
+
+    h3 {
+        margin-top: 0px;
+    }
+}
+
+.item {
+    display: flex;
+    flex-direction: column;
+
+    gap: 15px;
+}

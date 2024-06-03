@@ -44,6 +44,7 @@ $loader-base-background: #e4e4ed;
 
 .table td {
     padding: 10px 15px;
+    cursor: pointer;
     border: none;
     font-family: $user-type-font;
     font-weight: 500;
@@ -63,6 +64,7 @@ $loader-base-background: #e4e4ed;
 .thead tr {
     border: none;
     margin-bottom: 10px;
+    cursor: pointer;
 }
 
 .tbody tr:nth-child(odd) {

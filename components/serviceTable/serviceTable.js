@@ -7,11 +7,12 @@ import {
 import Image from "next/image";
 import DropdownMenuOptions from "../Dropdown/index";
 import style from "./servicetable.module.scss";
+import { useRouter } from "next/router";
 
 const columnHelper = createColumnHelper();
 
-function ServiceListTable({ data, handleDropdownClick, handleDataHover }) {
-    console.log(data, "data");
+function ServiceListTable({ data }) {
+    const router = useRouter()
 
     const columns = [
         columnHelper.accessor("user", {
@@ -42,6 +43,11 @@ function ServiceListTable({ data, handleDropdownClick, handleDataHover }) {
         getCoreRowModel: getCoreRowModel(),
     });
 
+    const handleRowClick = (row) => {
+        // Navigate to the booking details page with the selected row data
+        router.push(`/bookings/${row.original.id}`);
+    };
+
     return (
         <div className="p-2">
             <table className={style.table}>
@@ -65,20 +71,17 @@ function ServiceListTable({ data, handleDropdownClick, handleDataHover }) {
                 <tbody className={style.tbody}>
                     {table?.getRowModel()?.rows.map((row) => {
                         const isActive = row.original.active; // Get the 'active' value for the current row
-                        console.log(isActive);
                         const rowClassName = isActive ? style.activeRow : ''; // Conditional class for active row
                         return (
-                            <tr key={row.id} className={rowClassName}>
-                                {row.getVisibleCells().map((cell) => {
-                                    return (
-                                        <td key={cell.id}>
-                                            {flexRender(
-                                                cell.column.columnDef.cell,
-                                                cell.getContext()
-                                            )}
-                                        </td>
-                                    );
-                                })}
+                            <tr key={row.id} className={rowClassName} onClick={() => handleRowClick(row)}>
+                                {row.getVisibleCells().map((cell) => (
+                                    <td key={cell.id}>
+                                        {flexRender(
+                                            cell.column.columnDef.cell,
+                                            cell.getContext()
+                                        )}
+                                    </td>
+                                ))}
                             </tr>
                         );
                     })}

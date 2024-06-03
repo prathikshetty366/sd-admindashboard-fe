@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styles from "./dropdown.module.scss";
 
-const Dropdown = ({ options, onSelect, reset, notGarage }) => {
+const ServiceDropdown = ({ options, onSelect, reset, notGarage }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [selectedOption, setSelectedOption] = useState(null);
 
@@ -11,7 +11,7 @@ const Dropdown = ({ options, onSelect, reset, notGarage }) => {
 
     const handleOptionClick = (option) => {
         setSelectedOption(option.name);
-        onSelect(option.garageId);
+        onSelect(option.id);
         setIsOpen(false);
     };
 
@@ -22,7 +22,7 @@ const Dropdown = ({ options, onSelect, reset, notGarage }) => {
     return (
         <div className={styles.dropdown}>
             <div className={styles.selectedOption} onClick={toggleDropdown}>
-                {selectedOption ||  "Select the garage"}
+                {selectedOption || "Update the status"}
             </div>
             {isOpen && (
                 <div className={styles.options}>
@@ -41,4 +41,4 @@ const Dropdown = ({ options, onSelect, reset, notGarage }) => {
     );
 };
 
-export default Dropdown;
+export default ServiceDropdown;

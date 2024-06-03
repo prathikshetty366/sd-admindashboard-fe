@@ -72,6 +72,24 @@
             position: fixed;
             top: 10px
         }
+        .existingVehicleWrapper{
+            display: flex;
+            flex-direction: column;
+            .existingVehicle{
+                display: flex;
+                flex-direction: row;
+                flex-wrap: wrap;
+                width: 100%;
+                justify-content: center;
+                p{
+                    border: 1px solid gray;
+                    border-radius: 8px;
+                    padding: 10px;
+                    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+                    cursor: pointer;
+                }
+            }
+        }
 
         .vehicleInfo {
             display: flex;

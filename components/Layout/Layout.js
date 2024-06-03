@@ -21,7 +21,7 @@ function Layout({ children }) {
             <div className={styles.content}>
                 <div className={styles.sidebar}>
                     <h3
-                        className={pathname === '/bookings' ? styles.active : ''}
+                        className={pathname.includes("bookings")? styles.active : ''}
                         onClick={() => navigateTo('/bookings')}
                     >
                         Bookings

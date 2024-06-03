@@ -187,7 +187,7 @@ const Dashboard = () => {
           </div>
         </div>
       </Layout>
-      {modalIsOpen && <NewService modalIsOpen={modalIsOpen} garages={garages} completion={() => setModalIsOpen(false)} />}
+      {modalIsOpen && <NewService modalIsOpen={modalIsOpen} garages={garages} completion={() => { setModalIsOpen(false); fetchServices() }} />}
     </>
   );
 };
