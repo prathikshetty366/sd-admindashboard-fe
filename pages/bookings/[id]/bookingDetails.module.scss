@@ -22,6 +22,26 @@
         border: 1px solid gray;
         border-radius: 12px;
         margin-top: 20px;
+        .uploadLabel {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                cursor: pointer;
+            }
+        
+            .fileInput {
+                display: none;
+            }
+        
+            .previewContainer {
+                display: flex;
+                flex-wrap: wrap;
+                margin-top: 10px;
+            }
+        
+            .previewImage {
+                margin: 5px;
+            }
     }
 
     .vehicleInfo {
@@ -64,6 +84,51 @@
 
     h3 {
         margin-top: 0px;
+    }
+}
+.imageContainers {
+    width: 1200px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 20px 20px;
+    gap: 30px;
+    height: auto;
+    border: 1px solid gray;
+    border-radius: 12px;
+    margin-top: 20px;
+
+    .uploadLabel {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        cursor: pointer;
+    }
+
+    .fileInput {
+        display: none;
+    }
+
+    .previewContainer {
+        display: flex;
+        flex-wrap: wrap;
+        margin-top: 10px;
+    }
+
+    .previewImage {
+        margin: 5px;
+    }
+
+    button {
+        background-color: #74b3fe;
+        color: black;
+        padding: 15px;
+        border-radius: 6px;
+        outline: none;
+        font-weight: 600;
+        border: none;
+        cursor: pointer;
     }
 }
 

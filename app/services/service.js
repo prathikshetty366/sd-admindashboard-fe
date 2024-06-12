@@ -82,3 +82,18 @@ export const updateServiceStatus = async ({ id, serviceStatus }) => {
         throw error;
     }
 };
+
+
+export const fileUpload = async (formData) => {
+    try {
+        const response = await axios.post(`${process.env.NEXT_PUBLIC_LOGIN_URL}/admin/uploadPhoto`, formData, {
+            headers: {
+                'content-type': 'multipart/form-data',
+                'Authorization': `Bearer ${accessToken}`
+            }
+        });
+        return response; // Return response data
+    } catch (error) {
+        throw error; // Throw the error to propagate it to the caller
+    }
+};

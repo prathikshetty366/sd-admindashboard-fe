@@ -33,7 +33,7 @@ const FormComponent = () => {
                     placeholder="Password"
                   />
                   <button className={styles.flipCardBtn} type="submit">
-                    Let's go!
+                    Let`s go!
                   </button>
                 </Form>
               </Card>

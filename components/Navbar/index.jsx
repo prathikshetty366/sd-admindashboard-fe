@@ -2,6 +2,7 @@ import React from "react";
 import styles from "./navbar.module.scss";
 import Image from "next/image";
 import { WebImages } from "@/public/assets/login";
+import Link from "next/link";
 
 const Navbar = () => {
   return (
@@ -14,7 +15,7 @@ const Navbar = () => {
           <ul>
             <li className={styles.menu_items}>Home</li>
             <li className={styles.menu_items}>
-              <a href="/orders">Orders</a>
+              <Link href="/orders">Orders</Link>
             </li>
             <li className={styles.menu_items}>Users</li>
             <li className={styles.menu_items}>Vehicles</li>

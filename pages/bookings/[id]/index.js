@@ -2,11 +2,12 @@ import Layout from '@/components/Layout/Layout'
 import React, { useEffect, useState } from 'react'
 import styles from "./bookingDetails.module.scss"
 import { useRouter } from 'next/router'
-import { fetchServiceDetailsById, updateServiceStatus } from '@/app/services/service'
-import Dropdown from '@/components/Dropdown'
+import { fetchServiceDetailsById, fileUpload, updateServiceStatus } from '@/app/services/service'
 import ServiceDropdown from '@/components/ServiceDropDown'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Image from 'next/image'
+import upload from '@/public/assets/bookingDetails/upload.png'
 
 function ServiceDetails() {
     const router = useRouter()
@@ -14,6 +15,9 @@ function ServiceDetails() {
     const [serviceInfo, setServiceInfo] = useState({})
     const [recentStatus, setRecentStatus] = useState({})
     const [filteredOptions, setFilteredOptions] = useState([]);
+    const [selectedFiles, setSelectedFiles] = useState([]);
+    const [previews, setPreviews] = useState([]);
+
 
     const options = [
         { id: 1, name: "booked" },
@@ -26,7 +30,7 @@ function ServiceDetails() {
     ];
     useEffect(() => {
         fetchServiceInfoById()
-    }, [])
+    }, [id])
     const fetchServiceInfoById = async () => {
         try {
             const response = await fetchServiceDetailsById(id)
@@ -47,7 +51,6 @@ function ServiceDetails() {
     const handleStatusChange = async (serviceId) => {
         try {
             const serviceStatus = options.filter((status) => status.id == serviceId)
-            console.log(serviceStatus, ">>>>>>")
             const response = await updateServiceStatus({ id, serviceStatus: serviceStatus[0].name })
             console.log(response)
             if (response.success) {
@@ -66,6 +69,32 @@ function ServiceDetails() {
             setFilteredOptions([]);
         }
     };
+
+
+    const handleFileChange = (e) => {
+        const files = Array.from(e.target.files);
+        setSelectedFiles(files);
+        const filePreviews = files.map((file) => URL.createObjectURL(file));
+        setPreviews(filePreviews);
+    };
+    const uploadServiceImages = async () => {
+        try {
+            const uploadPromises = selectedFiles.map(async (file) => {
+                const formData = new FormData();
+                formData.append('image', file);
+
+                // Call the fileUpload function for each file
+                return await fileUpload(formData);
+            });
+
+            // Wait for all promises to resolve
+            const responses = await Promise.all(uploadPromises);
+            console.log(responses); // Handle responses as needed
+        } catch (error) {
+            console.error('Error uploading images:', error);
+        }
+    };
+
     return (
         <Layout>
             <div className={styles.container}>
@@ -213,7 +242,32 @@ function ServiceDetails() {
                     </div>
 
                 </div>
-
+                {recentStatus.serviceStatus === "repairing" && (
+                    <div className={styles.imageContainers}>
+                        <label htmlFor="fileUpload" className={styles.uploadLabel}>
+                            <Image src={upload} width={60} height={60} alt="Upload" />
+                            <input
+                                id="fileUpload"
+                                type="file"
+                                multiple
+                                onChange={handleFileChange}
+                                className={styles.fileInput}
+                            />
+                        </label>
+                        <div className={styles.previewContainer}>
+                            {previews.map((preview, index) => (
+                                <div key={index} className={styles.previewImage}>
+                                    <Image src={preview} alt={`Preview ${index + 1}`} width={100} height={100} />
+                                </div>
+                            ))}
+                        </div>
+                        {
+                            previews.length ? (
+                                <button onClick={uploadServiceImages}>Upload</button>
+                            ) : null
+                        }
+                    </div>
+                )}
             </div>
             <ToastContainer />
         </Layout>
