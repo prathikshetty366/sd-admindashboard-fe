@@ -17,6 +17,7 @@ function ServiceDetails() {
     const [filteredOptions, setFilteredOptions] = useState([]);
     const [selectedFiles, setSelectedFiles] = useState([]);
     const [previews, setPreviews] = useState([]);
+    const [uploadingProgress, setUploadingProgress] = useState(false) 
 
 
     const options = [
@@ -78,18 +79,24 @@ function ServiceDetails() {
         setPreviews(filePreviews);
     };
     const uploadServiceImages = async () => {
+        setUploadingProgress(true)
         try {
-            const uploadPromises = selectedFiles.map(async (file) => {
-                const formData = new FormData();
-                formData.append('image', file);
-
-                // Call the fileUpload function for each file
-                return await fileUpload(formData);
+            const formData = new FormData();
+            selectedFiles.forEach((file) => {
+                formData.append('images', file);
             });
+            formData.append('serviceId', id);
 
-            // Wait for all promises to resolve
-            const responses = await Promise.all(uploadPromises);
-            console.log(responses); // Handle responses as needed
+            // Call the fileUpload function with the FormData containing all images
+            toast.warning("Please wait till we upload the documents")
+            const response = await fileUpload(formData);
+            if (response.data) {
+                setUploadingProgress(false)
+                toast.success("Upload completed")
+                setPreviews([])
+                fetchServiceInfoById()
+            }
+            console.log(response.data); // Handle response as needed
         } catch (error) {
             console.error('Error uploading images:', error);
         }
@@ -242,6 +249,21 @@ function ServiceDetails() {
                     </div>
 
                 </div>
+                {serviceInfo.serviceDocuments && serviceInfo.serviceDocuments.length > 0 && (
+                    <>
+                        <h3>Service Information</h3>
+                        <div className={styles.imageContainers}>
+                            <div className={styles.previewContainer}>
+                                {serviceInfo.serviceDocuments.map((doc, index) => (
+                                    <div key={index} className={styles.previewImage}>
+                                        <Image src={doc.documentUrl} alt={`Preview`} width={100} height={100} />
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </>
+                )}
+
                 {recentStatus.serviceStatus === "repairing" && (
                     <div className={styles.imageContainers}>
                         <label htmlFor="fileUpload" className={styles.uploadLabel}>
@@ -263,7 +285,7 @@ function ServiceDetails() {
                         </div>
                         {
                             previews.length ? (
-                                <button onClick={uploadServiceImages}>Upload</button>
+                                <button disabled={uploadingProgress} onClick={uploadServiceImages}>Upload</button>
                             ) : null
                         }
                     </div>
