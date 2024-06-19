@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     images: {
-        domains: ['sd-service-documents.s3.amazonaws.com'],
+        domains: ['spannerdoor.s3.amazonaws.com'],
     },
 };
 
