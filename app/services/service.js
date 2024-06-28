@@ -97,3 +97,17 @@ export const fileUpload = async (formData) => {
         throw error; // Throw the error to propagate it to the caller
     }
 };
+
+export const generateJobsheetPdf = async (payload) => {
+    try {
+        const response = await axios.post(`${process.env.NEXT_PUBLIC_ADMIN_BACKEND}/service/generatePdf`, payload, {
+            headers: {
+                'content-type': 'application/json',
+                'Authorization': `Bearer ${accessToken}`
+            }
+        });
+        return response; // Return response data
+    } catch (error) {
+        throw error; // Throw the error to propagate it to the caller
+    }
+};

@@ -2,12 +2,12 @@ import Layout from '@/components/Layout/Layout'
 import React, { useEffect, useState } from 'react'
 import styles from "./bookingDetails.module.scss"
 import { useRouter } from 'next/router'
-import { fetchServiceDetailsById, fileUpload, updateServiceStatus } from '@/app/services/service'
+import { fetchServiceDetailsById, fileUpload, generateJobsheetPdf, updateServiceStatus } from '@/app/services/service'
 import ServiceDropdown from '@/components/ServiceDropDown'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Image from 'next/image'
-import upload from '@/public/assets/bookingDetails/upload.png'
+import Jobsheet from '@/components/Jobsheet'
 
 function ServiceDetails() {
     const router = useRouter()
@@ -15,10 +15,6 @@ function ServiceDetails() {
     const [serviceInfo, setServiceInfo] = useState({})
     const [recentStatus, setRecentStatus] = useState({})
     const [filteredOptions, setFilteredOptions] = useState([]);
-    const [selectedFiles, setSelectedFiles] = useState([]);
-    const [previews, setPreviews] = useState([]);
-    const [uploadingProgress, setUploadingProgress] = useState(false) 
-
 
     const options = [
         { id: 1, name: "booked" },
@@ -31,7 +27,10 @@ function ServiceDetails() {
     ];
     useEffect(() => {
         fetchServiceInfoById()
-    }, [id])
+    }, [id]);
+
+
+
     const fetchServiceInfoById = async () => {
         try {
             const response = await fetchServiceDetailsById(id)
@@ -72,34 +71,41 @@ function ServiceDetails() {
     };
 
 
-    const handleFileChange = (e) => {
-        const files = Array.from(e.target.files);
-        setSelectedFiles(files);
-        const filePreviews = files.map((file) => URL.createObjectURL(file));
-        setPreviews(filePreviews);
-    };
-    const uploadServiceImages = async () => {
-        setUploadingProgress(true)
-        try {
-            const formData = new FormData();
-            selectedFiles.forEach((file) => {
-                formData.append('images', file);
-            });
-            formData.append('serviceId', id);
 
-            // Call the fileUpload function with the FormData containing all images
-            toast.warning("Please wait till we upload the documents")
-            const response = await fileUpload(formData);
-            if (response.data) {
-                setUploadingProgress(false)
-                toast.success("Upload completed")
-                setPreviews([])
-                fetchServiceInfoById()
-            }
-            console.log(response.data); // Handle response as needed
-        } catch (error) {
-            console.error('Error uploading images:', error);
+
+    const generateJobsheet = async (data, items, images) => {
+        console.log('Jobsheet Data:', data);
+        console.log('Jobsheet Items:', items);
+        console.log('Jobsheet images:', images);
+        let payload = {
+            companyName: "Spannerdoor Pvt Ltd",
+            garageAddress: serviceInfo?.garage?.address,
+            garageContact: serviceInfo?.garage?.ownerContact,
+            companyEmail: "spannerdoor@gmail.com",
+            garageId: serviceInfo?.garage?.id,
+            customerName: serviceInfo?.user?.firstName,
+            customerAddress: null,
+            customerEmail: serviceInfo?.user?.email,
+            customerContact: serviceInfo?.user?.phoneNumber,
+            technicianId: null,
+            vehicleBrand: serviceInfo?.vehicle?.brandName,
+            vehicleModel: serviceInfo?.vehicle?.brandModel,
+            vehicleReg: serviceInfo?.vehicle?.licensePlate,
+            fuelStatus: data.fuelStatus,
+            odometerReading: data.odometerReading,
+            serviceType: "General",
+            serviceNumber: serviceInfo?.serviceNumber,
+            serviceId: id,
+            checkNumber: null,
+            jobNumber: null,
+            createdDate: null,
+            dueDate: null,
+            items: items,
+            customerVoice: "test",
+            newSparesImages: images
         }
+        const response = await generateJobsheetPdf(payload)
+        console.log(response)
     };
 
     return (
@@ -263,33 +269,13 @@ function ServiceDetails() {
                         </div>
                     </>
                 )}
+                <h3>Jobsheet</h3>
+                {/* {recentStatus.serviceStatus === "repairing" && ( */}
+                <Jobsheet generateJobsheet={generateJobsheet} />
 
-                {recentStatus.serviceStatus === "repairing" && (
-                    <div className={styles.imageContainers}>
-                        <label htmlFor="fileUpload" className={styles.uploadLabel}>
-                            <Image src={upload} width={60} height={60} alt="Upload" />
-                            <input
-                                id="fileUpload"
-                                type="file"
-                                multiple
-                                onChange={handleFileChange}
-                                className={styles.fileInput}
-                            />
-                        </label>
-                        <div className={styles.previewContainer}>
-                            {previews.map((preview, index) => (
-                                <div key={index} className={styles.previewImage}>
-                                    <Image src={preview} alt={`Preview ${index + 1}`} width={100} height={100} />
-                                </div>
-                            ))}
-                        </div>
-                        {
-                            previews.length ? (
-                                <button disabled={uploadingProgress} onClick={uploadServiceImages}>Upload</button>
-                            ) : null
-                        }
-                    </div>
-                )}
+                {/* )} */}
+
+
             </div>
             <ToastContainer />
         </Layout>
