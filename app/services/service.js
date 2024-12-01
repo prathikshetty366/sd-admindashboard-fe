@@ -54,7 +54,16 @@ export const fetchServiceDetailsById = async (serviceId) => {
         return response.data;
     } catch (error) {
         console.error('Error fetching service Info:', error);
-        throw error;
+        if (error.response) {
+            // API responded with a status code outside the 2xx range
+            throw new Error(error.response.data?.message || 'Failed to fetch service details');
+          } else if (error.request) {
+            // Request was made, but no response received
+            throw new Error('No response from the server. Please try again later.');
+          } else {
+            // Something else caused the error
+            throw new Error('An unexpected error occurred.');
+          }
     }
 }
 

@@ -1,5 +1,7 @@
+import { _getCookies } from '@/utils/cookies';
 import axios from 'axios';
 
+const accessToken = _getCookies("accessToken")
 /**
  * Function to sign up a user with phone number, role ID, and referral code.
  * 
@@ -54,3 +56,28 @@ export const verifyOtp = async (phoneNumber, otp) => {
         throw error;
     }
 };
+
+
+export const getUserById = async () => {
+    try {
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_LOGIN_URL}/users/getUserById`, {
+            headers: {
+                'accept': 'application/json',
+                'Authorization': `Bearer ${accessToken}`
+            }
+        });
+
+        return response.data;
+    } catch (error) {
+        if (error.response) {
+            // API responded with a status code outside the 2xx range
+            throw new Error(error.response.data?.message || 'Failed to fetch user details');
+          } else if (error.request) {
+            // Request was made, but no response received
+            throw new Error('No response from the server. Please try again later.');
+          } else {
+            // Something else caused the error
+            throw new Error('An unexpected error occurred.');
+          }
+    }
+}

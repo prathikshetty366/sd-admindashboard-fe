@@ -16,6 +16,7 @@ import { getOrders } from "@/data";
 import { MagnifyingGlassIcon } from "@heroicons/react/16/solid";
 import { CreateOrder } from "./createorder";
 import { fetchAllGarages, fetchAllServices } from "@/app/services/service";
+import { useRouter } from "next/router";
 
 export const metadata = {
   title: "Orders",
@@ -55,6 +56,7 @@ export default function Orders() {
   const [endDate, setEndDate] = useState(null);
   const [search, setSearch] = useState('');
   const [status, setStatus] = useState('');
+  const router = useRouter()
 
   const fetchGarages = async () => {
     try {
@@ -196,6 +198,7 @@ export default function Orders() {
               key={booking?.id}
               href={booking?.url}
               title={`Order #${booking?.id}`}
+              onClick= {()=>router.push(`/orders/${booking.id}`)}
             >
               <TableCell>{booking?.user.firstName}</TableCell>
               <TableCell className="text-zinc-500">{booking?.vehicle?.licensePlate}</TableCell>

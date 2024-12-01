@@ -16,6 +16,12 @@ import { CalendarIcon, ChevronLeftIcon } from "@heroicons/react/16/solid";
 import { Reschedule } from "../reschedule";
 import { PaymentDetails } from "./PaymentDetails";
 import OtherVehicle from "./othervehicle";
+import { fetchServiceDetailsById, updateServiceStatus } from "@/app/services/service";
+import { useState ,useEffect} from "react";
+import { useRouter } from "next/router";
+import { Select } from "@/components/select";
+import { ToastContainer, toast } from 'react-toastify';
+
 
 export async function generateMetadata({ params }) {
   // Static metadata
@@ -25,36 +31,141 @@ export async function generateMetadata({ params }) {
 }
 
 export default function Order() {
-  // Static order data
-  const order = {
-    id: "1234",
-    amount: { usd: 500 },
-    date: "2024-11-22",
-    customer: {
-      name: "John Doe",
-      contact: "+1234567890",
-      email: "johndoe@example.com",
-    },
-    booking: {
-      dateTime: "2024-11-23 10:00 AM",
-      pickLocation: "Location A",
-      dropLocation: "Location B",
-    },
-    vehicle: {
-      number: "ABC1234",
-      brand: "Honda",
-      year: 2020,
-      model: "CBR 500R",
-    },
-    service: {
-      lastServiceDate: "2024-06-15",
-      odometer: "12000 km",
-      billAmount: 300,
-      jobsheetUrl: "/path/to/jobsheet",
-      invoiceUrl: "/path/to/invoice",
-      comment: "Regular service done",
-    },
-  };
+
+  const router = useRouter()
+  const { id } = router.query
+  const [serviceInfo, setServiceInfo] = useState({})
+  const [recentStatus, setRecentStatus] = useState({})
+  const [filteredOptions, setFilteredOptions] = useState([])
+  const [selectedFiles, setSelectedFiles] = useState([]);
+  const [previews, setPreviews] = useState([]);
+  const [uploadingProgress, setUploadingProgress] = useState(false) 
+  const options = [
+    { id: 1, name: "booked" },
+    { id: 2, name: "accepted" },
+    { id: 3, name: "picked" },
+    { id: 4, name: "repairing" },
+    { id: 5, name: "billing" },
+    { id: 6, name: "readyToDeliver" },
+    { id: 7, name: "delivered" }
+  ];
+
+  useEffect(() => {
+    if (id) {
+      fetchServiceInfoById();
+    } else {
+      console.error("Service ID is undefined or missing.");
+    }}, [id]);
+
+
+
+const fetchServiceInfoById = async () => {
+    try {
+      console.log(id,"RRRR")
+        const response = await fetchServiceDetailsById(id)
+        if (response.success) {
+            setServiceInfo(response.data)
+            const mostRecent = response.data.serviceHistory.reduce((latest, current) => {
+                return new Date(latest.createdAt) > new Date(current.createdAt) ? latest : current;
+            });
+            setRecentStatus(mostRecent)
+            filterOptions(mostRecent.serviceStatus);
+
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}
+const handleStatusChange = async (status) => {
+  if (!status) return
+  console.log(status,">>>>>>>")
+  try {
+      const response = await updateServiceStatus({ id, serviceStatus: status})
+      console.log(response)
+      if (response.success) {
+          toast.success("Status updated.")
+          fetchServiceInfoById()
+      }
+  } catch (error) {
+      console.log(error)
+  }
+}
+const filterOptions = (currentStatus) => {
+  const currentIndex = options.findIndex(option => option.name === currentStatus);
+  if (currentIndex !== -1 && currentIndex < options.length - 1) {
+      setFilteredOptions([options[currentIndex + 1]]);
+  } else {
+      setFilteredOptions([]);
+  }
+};
+
+
+
+const handleFileChange = (e) => {
+  const files = Array.from(e.target.files);
+  setSelectedFiles(files);
+  const filePreviews = files.map((file) => URL.createObjectURL(file));
+  setPreviews(filePreviews);
+};
+const uploadServiceImages = async () => {
+  setUploadingProgress(true)
+  try {
+      const formData = new FormData();
+      selectedFiles.forEach((file) => {
+          formData.append('images', file);
+      });
+      formData.append('serviceId', id);
+
+      // Call the fileUpload function with the FormData containing all images
+      toast.warning("Please wait till we upload the documents")
+      const response = await fileUpload(formData);
+      if (response.data) {
+          setUploadingProgress(false)
+          toast.success("Upload completed")
+          setPreviews([])
+          fetchServiceInfoById()
+      }
+      console.log(response.data); // Handle response as needed
+  } catch (error) {
+      console.error('Error uploading images:', error);
+  }
+};
+
+
+const generateJobsheet = async (data, items, images) => {
+  console.log('Jobsheet Data:', data);
+  console.log('Jobsheet Items:', items);
+  console.log('Jobsheet images:', images);
+  let payload = {
+      companyName: "Spannerdoor Pvt Ltd",
+      garageAddress: serviceInfo?.garage?.address,
+      garageContact: serviceInfo?.garage?.ownerContact,
+      companyEmail: "spannerdoor@gmail.com",
+      garageId: serviceInfo?.garage?.id,
+      customerName: serviceInfo?.user?.firstName,
+      customerAddress: null,
+      customerEmail: serviceInfo?.user?.email,
+      customerContact: serviceInfo?.user?.phoneNumber,
+      technicianId: null,
+      vehicleBrand: serviceInfo?.vehicle?.brandName,
+      vehicleModel: serviceInfo?.vehicle?.brandModel,
+      vehicleReg: serviceInfo?.vehicle?.licensePlate,
+      fuelStatus: data.fuelStatus,
+      odometerReading: data.odometerReading,
+      serviceType: "General",
+      serviceNumber: serviceInfo?.serviceNumber,
+      serviceId: id,
+      checkNumber: null,
+      jobNumber: null,
+      createdDate: null,
+      dueDate: null,
+      items: items,
+      customerVoice: "test",
+      newSparesImages: images
+  }
+  const response = await generateJobsheetPdf(payload)
+  console.log(response)
+};
 
   return (
     <>
@@ -69,11 +180,24 @@ export default function Order() {
       </div>
       <div className="mt-4 lg:mt-8">
         <div className="flex items-center gap-4">
-          <Heading>Order #{order.id}</Heading>
-          <Badge color="lime">Payment Successfully</Badge>
-          <Badge color="red">Payment Pending</Badge>
+          <Heading>Order #{serviceInfo?.serviceNumber}</Heading>
+          <Badge color="lime">{recentStatus?.serviceStatus?.toUpperCase()}</Badge>
+          {/* <Badge color="red">Payment Pending</Badge> */}
         </div>
-        <div className="isolate mt-2.5 flex flex-wrap justify-between gap-x-6 gap-y-4">
+        <div className="mt-8 flex items-end justify-between">
+        <div>
+          <Select name="period"   onChange={(e)=>{handleStatusChange(e.target.value)}} >
+            <option value=''>Change Service status</option>
+            {filteredOptions.map((option)=>{
+              return(
+                <option value={option.name}>{option.name}</option>
+              )
+            })}
+          
+          </Select>
+        </div>
+      </div>
+        {/* <div className="isolate mt-2.5 flex flex-wrap justify-between gap-x-6 gap-y-4">
           <div className="flex flex-wrap gap-x-10 gap-y-4 py-1.5">
             <span className="flex items-center gap-3 text-base/6 text-zinc-950 sm:text-sm/6 dark:text-white">
               <BanknotesIcon className="size-4 shrink-0 fill-zinc-400 dark:fill-zinc-500" />
@@ -92,7 +216,7 @@ export default function Order() {
               Update Payment
             </PaymentDetails>
           </div>
-        </div>
+        </div> */}
       </div>
 
       <div className="mt-12">
@@ -108,42 +232,42 @@ export default function Order() {
           <div className="flex-1">
             <DescriptionList>
               <DescriptionTerm>Customer</DescriptionTerm>
-              <DescriptionDetails>{order.customer.name}</DescriptionDetails>
+              <DescriptionDetails>{serviceInfo?.user?.firstName}</DescriptionDetails>
 
               <DescriptionTerm>Contact</DescriptionTerm>
-              <DescriptionDetails>{order.customer.contact}</DescriptionDetails>
+              <DescriptionDetails>{serviceInfo?.user?.phoneNumber}</DescriptionDetails>
 
               <DescriptionTerm>Email</DescriptionTerm>
-              <DescriptionDetails>{order.customer.email}</DescriptionDetails>
-
+              <DescriptionDetails>{serviceInfo?.user?.email}</DescriptionDetails>
+{/* 
               <DescriptionTerm>
                 Quote <Badge color="lime">Created</Badge>
               </DescriptionTerm>
-              <DescriptionDetails>{order.amount.usd}</DescriptionDetails>
+              <DescriptionDetails>{order.amount.usd}</DescriptionDetails> */}
 
-              <DescriptionTerm>
+              {/* <DescriptionTerm>
                 Invoice <Badge color="lime">Created</Badge>
               </DescriptionTerm>
-              <DescriptionDetails>{order.amount.usd}</DescriptionDetails>
+              <DescriptionDetails>{order.amount.usd}</DescriptionDetails> */}
             </DescriptionList>
           </div>
           <div className="flex-1">
             <DescriptionList>
               <DescriptionTerm>Booking Date and Time</DescriptionTerm>
               <DescriptionDetails>
-                <Button outline>{order.booking.dateTime}</Button>
-                <Reschedule outline amount={order.amount.usd}>
+                <Button outline>{serviceInfo?.serviceScheduledDate}</Button>
+                {/* <Reschedule outline amount={order.amount.usd}>
                   Reschedule
-                </Reschedule>
+                </Reschedule> */}
               </DescriptionDetails>
               <DescriptionTerm>&rarr; Pick</DescriptionTerm>
               <DescriptionDetails>
-                {order.booking.pickLocation}
+                {serviceInfo?.vehiclePickupType}
               </DescriptionDetails>
 
               <DescriptionTerm>&rarr; Drop</DescriptionTerm>
               <DescriptionDetails>
-                {order.booking.dropLocation}
+                {serviceInfo?.vehicleDropType}
               </DescriptionDetails>
             </DescriptionList>
           </div>
@@ -154,11 +278,11 @@ export default function Order() {
           <div>
             <Subheading>Vehicle Details</Subheading>
           </div>
-          <div>
+          {/* <div>
             <OtherVehicle outline>
               Other Vehicles <Badge color="lime">3 Vehicles</Badge>
             </OtherVehicle>
-          </div>
+          </div> */}
         </div>
         <Divider className="mt-4" />
 
@@ -166,26 +290,26 @@ export default function Order() {
           <div className="flex-1">
             <DescriptionList>
               <DescriptionTerm>Vehicle No</DescriptionTerm>
-              <DescriptionDetails>{order.vehicle.number}</DescriptionDetails>
+              <DescriptionDetails>{serviceInfo?.vehicle?.licensePlate}</DescriptionDetails>
 
               <DescriptionTerm>Brand</DescriptionTerm>
-              <DescriptionDetails>{order.vehicle.brand}</DescriptionDetails>
+              <DescriptionDetails>{serviceInfo?.vehicle?.brandName}</DescriptionDetails>
             </DescriptionList>
           </div>
           <div className="flex-1">
             <DescriptionList>
               <DescriptionTerm>Year</DescriptionTerm>
-              <DescriptionDetails>{order.vehicle.year}</DescriptionDetails>
+              <DescriptionDetails>{serviceInfo?.vehicle?.registrationDate}</DescriptionDetails>
 
               <DescriptionTerm>Model</DescriptionTerm>
-              <DescriptionDetails>{order.vehicle.model}</DescriptionDetails>
+              <DescriptionDetails>{serviceInfo?.vehicle?.brandModel}</DescriptionDetails>
             </DescriptionList>
           </div>
         </div>
 
         <Divider className="mb-4 mt-4" />
 
-        <Subheading>Last Service Details</Subheading>
+        {/* <Subheading>Last Service Details</Subheading>
         <Divider className="mt-4" />
 
         <div className="flex space-x-6">
@@ -234,7 +358,7 @@ export default function Order() {
               <DescriptionDetails>{order.service.comment}</DescriptionDetails>
             </DescriptionList>
           </div>
-        </div>
+        </div> */}
       </div>
 
       <div className="col-span-4">
@@ -265,6 +389,7 @@ export default function Order() {
           </DescriptionList>
         </div>
       </div>
+
     </>
   );
 }

@@ -1,5 +1,6 @@
 "use client";
 
+import { getUserById } from "@/app/services/auth";
 import { Avatar } from "@/components/avatar";
 import {
   Dropdown,
@@ -34,6 +35,7 @@ import {
   Square2StackIcon,
 } from "@heroicons/react/16/solid";
 import { usePathname } from "next/navigation";
+import { useEffect,useState } from "react";
 
 function AccountDropdownMenu({ anchor }) {
   return (
@@ -53,7 +55,21 @@ function AccountDropdownMenu({ anchor }) {
 
 export function ApplicationLayout({ events, children }) {
   let pathname = usePathname();
-
+ const [userInfo,setUserInfo] =useState({})
+ const fetchUserInfo=async()=>{
+  try {
+    
+    const user = await getUserById()
+    if(user?.data){
+      setUserInfo(user?.data)
+    }
+  } catch (error) {
+    console.log(error,">>>>>>")
+  }
+ }
+ useEffect(()=>{
+fetchUserInfo()
+ },[])
   return (
     <div>
       <SidebarLayout
@@ -163,11 +179,11 @@ export function ApplicationLayout({ events, children }) {
               <Dropdown>
                 <DropdownButton as={SidebarItem}>
                   <span className="flex min-w-0 items-center gap-3">
-                    <Avatar src="/users/anush.jpg" className="size-10" square />
+                    <Avatar src="" className="size-10" square />
                     <span>
-                      <span className="block text-sm font-medium">Anush G</span>
+                      <span className="block text-sm font-medium">{userInfo.firstName}</span>
                       <span className="block text-xs">
-                        anush@spannerdoor.com
+                      {userInfo.email}
                       </span>
                     </span>
                   </span>
