@@ -1,0 +1,21 @@
+// {
+//   "compilerOptions": {
+//     "paths": {
+//       "@/*": ["./*"]
+//     }
+//   }
+// }
+
+{
+  "compilerOptions": {
+    "baseUrl": ".", // Base directory for imports (root of the project)
+    "paths": {
+      "@/*": ["*"], // Root alias
+      "@components/*": ["components/*"], // Alias for 'components' folder
+      "@utils/*": ["utils/*"] // Alias for 'utils' folder
+    }
+  },
+  "include": [
+    "**/*" // Include all files in the project
+  ]
+}

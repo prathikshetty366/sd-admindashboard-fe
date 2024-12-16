@@ -1,0 +1,55 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+input,
+textarea,
+select {
+  font-size: 18px; /* This prevents zooming */
+}
+
+/* ============ Loader.css ========================= */
+.loader-overlay {
+  @apply fixed top-0 left-0 w-full h-full bg-black/50 flex justify-center items-center z-50;
+}
+
+.loader img {
+  animation: tilt 1.5s ease-in-out infinite;
+}
+
+/* Tilt animation */
+@keyframes tilt {
+  0% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(10deg);
+  }
+  50% {
+    transform: rotate(0deg);
+  }
+  75% {
+    transform: rotate(-10deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
