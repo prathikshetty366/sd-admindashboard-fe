@@ -3,12 +3,6 @@ export const options = [
     title: "Accounts", // Title for the options
     items: [
       {
-        id: 1,
-        name: "Profile",
-        href: "/profile",
-        icon: null, // You can replace null with an icon component if needed
-      },
-      {
         id: 2,
         name: "Settings",
         href: "/settings",

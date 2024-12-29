@@ -540,3 +540,32 @@ export const summary = {
   shipping,
   total,
 };
+
+// /components/Table/data.js
+
+export const vehiclesData = [
+  {
+    customerId: "CUST001",
+    regNo: "KA01AB1234",
+    model: "Swift",
+    brand: "Maruti Suzuki",
+    year: 2020,
+    lastService: "2023-10-15",
+  },
+  {
+    customerId: "CUST002",
+    regNo: "KA05XY5678",
+    model: "i20",
+    brand: "Hyundai",
+    year: 2019,
+    lastService: "2023-11-10",
+  },
+  {
+    customerId: "CUST003",
+    regNo: "MH12XY7890",
+    model: "City",
+    brand: "Honda",
+    year: 2018,
+    lastService: "2023-12-05",
+  },
+];

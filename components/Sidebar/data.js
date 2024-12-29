@@ -45,6 +45,11 @@ export const navigation = [
     icon: UsersIcon,
   },
   {
+    name: "Vehicles",
+    href: "/vehicles",
+    icon: UsersIcon,
+  },
+  {
     name: "Reports",
     href: "/reports",
     icon: FolderIcon,

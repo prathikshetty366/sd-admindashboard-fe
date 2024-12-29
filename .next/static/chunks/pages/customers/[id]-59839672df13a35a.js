@@ -1,1 +1,0 @@
-(self.webpackChunk_N_E=self.webpackChunk_N_E||[]).push([[27],{50194:(e,s,_)=>{(window.__NEXT_P=window.__NEXT_P||[]).push(["/customers/[id]",function(){return _(92704)}])},92704:(e,s,_)=>{"use strict";_.r(s),_.d(s,{default:()=>r});var u=_(74848);_(96540);let r=()=>(0,u.jsx)("div",{children:"CustomerDetails"})}},e=>{var s=s=>e(e.s=s);e.O(0,[636,593,792],()=>s(50194)),_N_E=e.O()}]);

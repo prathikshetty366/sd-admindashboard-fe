@@ -1,26 +1,12 @@
 import { React, useState, useEffect } from "react";
-import Button from "@/components/Button/Button";
 import GreetingTime from "@/components/Greetingtime/Greetingtime";
-import { ArrowRightIcon } from "@heroicons/react/20/solid";
-import Table from "@/components/Table/Table";
-import { sampletabledata } from "@/components/Table/data";
-import TabComponent from "@/components/TabComponent/TabComponent";
-import { tabsData } from "./../components/TabComponent/data";
 import Stats from "@/components/Stats/Stats";
-import { statsData } from "./../components/Stats/data";
-import OrderTracker from "@/components/OrderTracker/OrderTracker";
-import Upload from "@/components/Upload/Upload";
-import GetGoogleReview from "@/components/GetGoogleReview/GetGoogleReview";
+import { sampleStats, OverallStats } from "@/components/Stats/data";
 import { Dialog } from "@/components/Dialog/Dialog";
 import Loader from "@/components/Loader/Loader";
-import QuotePreviewPage from "./quote/[orderId]";
+import Button from "@/components/Button/Button";
 
 export default function Home() {
-  const { miniStats } = statsData;
-  const orderId = "7867";
-  const googleReviewCode = "CeOlLmnRDVOuEBM";
-  const customerNumber = "917019864767";
-
   const [inputValue, setInputValue] = useState(""); // For handling form inputs
 
   // Function to handle input change
@@ -70,41 +56,26 @@ export default function Home() {
   return (
     <>
       <div>
-        <div>
-          <GreetingTime />
-        </div>
-        <div>
-          <Stats miniStats={miniStats} />
-        </div>
-        <div className="mt-5 mb-5">
-          <TabComponent tabsData={tabsData} />
-        </div>
-        <div className="mt-5 mb-5">
-          <Button
-            href="/home"
-            color="blue"
-            variant="filled"
-            icon={ArrowRightIcon}
-            iconPosition="left"
-            width="auto"
-          >
-            Go to Home
-          </Button>
-        </div>
-        <div className="mt-5 mb-5">
-          <Table
-            headers={["Date", "Name", "Email", "Role"]}
-            data={sampletabledata}
-            filters={["Admin", "User"]}
-            daterange={true} // Enable date range filter
-          />
+        <div className="flex flex-row justify-between">
+          <div>
+            <GreetingTime />
+          </div>
+          <div>
+            <Button href="/offlinebook" color="blue" variant="outline">
+              Offline Booking
+            </Button>
+          </div>
         </div>
 
+        <div className="pt-5">
+          <h2 className="font-bold font-[30px] pb-4">Order Overview</h2>
+          <hr className="pb-4" />
+          <Stats sampleStats={OverallStats} />
+        </div>
 
+        <h2 className="pt-5">Different Model</h2>
 
-        <QuotePreviewPage />
-
-        <div className="p-6">
+        <div className="p-1 flex gap-x-3">
           {/* Confirm Dialog */}
           <div className="mt-5 mb-5">
             <Dialog

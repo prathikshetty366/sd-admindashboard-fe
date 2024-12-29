@@ -7,6 +7,8 @@ export const sampleStats = [
     previousStat: "$100,000",
     change: "$20,000",
     changeType: "increase",
+    createdDate: "2024-12-25", // ISO date format
+    path: "/Reports",
   },
   {
     name: "Total Orders",
@@ -14,6 +16,8 @@ export const sampleStats = [
     previousStat: "1,200",
     change: "300",
     changeType: "increase",
+    createdDate: "2023-12-20",
+    path: "/Orders",
   },
   {
     name: "New Customers",
@@ -21,6 +25,8 @@ export const sampleStats = [
     previousStat: "200",
     change: "50",
     changeType: "increase",
+    createdDate: "2023-12-18",
+    path: "/Customers",
   },
   {
     name: "Total Expenses",
@@ -28,30 +34,52 @@ export const sampleStats = [
     previousStat: "$40,000",
     change: "$5,000",
     changeType: "increase",
+    createdDate: "2023-12-10",
+    path: "/Expenses",
   },
 ];
 
-export const miniStats = [
+export const OverallStats = [
   {
     name: "Total Revenue",
-    stat: "$120,000",
+    stat: "1",
+    createdDate: "2023-12-20",
+    path: "/reports",
   },
   {
-    name: "Total Orders",
-    stat: "1,500",
+    name: "Total Booking",
+    stat: "12",
+    createdDate: "2023-12-20",
+    path: "/orders",
+  },
+  {
+    name: "Total Vehicles",
+    stat: "1",
+    createdDate: "2023-12-20",
+    path: "/vehicles",
+  },
+  {
+    name: "Total RSA",
+    stat: "1",
+    createdDate: "2023-12-20",
+    path: "/rsa",
   },
   {
     name: "New Customers",
-    stat: "250",
+    stat: "8",
+    createdDate: "2023-12-20",
+    path: "/customers",
   },
   {
-    name: "Total Expenses",
-    stat: "$45,000",
+    name: "Reiminders",
+    stat: "4",
+    createdDate: "2023-12-20",
+    path: "/reminders",
   },
 ];
 
 // Export them together as an object
 export const statsData = {
   sampleStats,
-  miniStats,
+  OverallStats,
 };

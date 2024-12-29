@@ -1,1 +1,0 @@
-(self.webpackChunk_N_E=self.webpackChunk_N_E||[]).push([[34],{42146:(e,s,_)=>{(window.__NEXT_P=window.__NEXT_P||[]).push(["/spares/[id]",function(){return _(37443)}])},37443:(e,s,_)=>{"use strict";_.r(s),_.d(s,{default:()=>a});var r=_(74848);_(96540);let a=()=>(0,r.jsx)("div",{children:"SparesDetails"})}},e=>{var s=s=>e(e.s=s);e.O(0,[636,593,792],()=>s(42146)),_N_E=e.O()}]);

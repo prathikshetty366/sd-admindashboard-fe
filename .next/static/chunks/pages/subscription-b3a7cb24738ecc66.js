@@ -1,1 +1,0 @@
-(self.webpackChunk_N_E=self.webpackChunk_N_E||[]).push([[803],{29287:(_,s,i)=>{(window.__NEXT_P=window.__NEXT_P||[]).push(["/subscription",function(){return i(58319)}])},58319:(_,s,i)=>{"use strict";i.r(s),i.d(s,{default:()=>u});var n=i(74848);i(96540);let u=()=>(0,n.jsx)("div",{children:"Subscription"})}},_=>{var s=s=>_(_.s=s);_.O(0,[636,593,792],()=>s(29287)),_N_E=_.O()}]);
