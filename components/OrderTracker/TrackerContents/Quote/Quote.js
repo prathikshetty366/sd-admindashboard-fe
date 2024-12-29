@@ -58,7 +58,6 @@
 // }
 
 import React, { useState, useEffect } from "react";
-import { jsPDF } from "jspdf";
 import "jspdf-autotable"; // Import the jspdf-autotable plugin
 import InputField from "@/components/InputField/InputField";
 import { EditableTable } from "@/components/Table/EditableTable";

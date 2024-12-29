@@ -1,127 +1,41 @@
-import { useTheme } from "@/context/ThemeContext"; // Import the theme context
+import React, { useState } from "react";
+import Technicians from "@/components/Settings/Technicians";
+import Accounts from "@/components/Settings/Accounts";
+import Theme from "@/components/Settings/Theme";
+import OutletInfo from "@/components/Settings/Outletinfo";
 
 const Settings = () => {
-  const { theme, setTheme, fontSize, setFontSize, color, setColor } =
-    useTheme(); // Use context values
-
-  // Define color options for primary, secondary, and accent
-  const colorOptions = {
-    primary: "#3490dc", // Blue
-    secondary: "#ffed4a", // Yellow
-    accent: "#6c757d", // Gray
-  };
-
-  // Define font size classes
-  const fontSizeClass = {
-    sm: "text-sm",
-    base: "text-base",
-    lg: "text-lg",
-    xl: "text-xl",
-  };
+  const [activeTab, setActiveTab] = useState("outletInfo");
 
   return (
-    <div
-      className={`min-h-screen p-8 transition-all duration-300 ${
-        theme === "dark" ? "bg-gray-800 text-white" : "bg-white text-black"
-      }`}
-    >
-      <h1 className={`text-2xl font-semibold mb-4 ${fontSizeClass[fontSize]}`}>
-        Settings
-      </h1>
+    <div className="min-h-screen p-8">
+      <h1 className="text-2xl font-semibold mb-4">Settings</h1>
 
-      <div className="border mb-5 mt-3"></div>
+      {/* Tabs */}
+      <div className="flex space-x-4 border-b mb-5">
+        {["outletInfo", "technicianInfo", "accounts", "theme"].map((tab) => (
+          <button
+            key={tab}
+            onClick={() => setActiveTab(tab)}
+            className={`py-2 px-6 border-b-2 ${
+              activeTab === tab
+                ? "border-blue-500 text-blue-500 font-bold"
+                : "border-transparent text-gray-500"
+            }`}
+          >
+            {tab
+              .replace(/([A-Z])/g, " $1")
+              .replace(/^./, (str) => str.toUpperCase())}
+          </button>
+        ))}
+      </div>
 
-      <div className="space-y-6">
-        {/* Theme Toggle */}
-        <div className="flex flex-row justify-between">
-          <div>
-            <h2 className={`text-lg mb-2 ${fontSizeClass[fontSize]}`}>Theme</h2>
-          </div>
-          <div className="flex space-x-4">
-            <button
-              onClick={() => setTheme("light")}
-              className={`py-2 px-6 rounded-full ${
-                theme === "light"
-                  ? "bg-blue-500 text-white"
-                  : "bg-gray-300 text-black"
-              }`}
-            >
-              Light Mode
-            </button>
-            <button
-              onClick={() => setTheme("dark")}
-              className={`py-2 px-6 rounded-full ${
-                theme === "dark"
-                  ? "bg-blue-500 text-white"
-                  : "bg-gray-300 text-black"
-              }`}
-            >
-              Dark Mode
-            </button>
-          </div>
-        </div>
-
-        <div className="border mb-5 mt-3"></div>
-
-        {/* Font Size Selection */}
-        <div className="flex flex-row justify-between">
-          <div>
-            <h2 className={`text-lg mb-2 ${fontSizeClass[fontSize]}`}>
-              Font Size
-            </h2>
-          </div>
-          <div className="flex flex-row space-x-2">
-            {["sm", "base", "lg", "xl"].map((size) => (
-              <button
-                key={size}
-                onClick={() => setFontSize(size)}
-                className={`block w-[80px] h-[50px] text-center border rounded-md ${
-                  fontSize === size ? "bg-blue-500 text-white" : "bg-white-200"
-                }`}
-              >
-                <span className={`${fontSizeClass[size]}`}>{size}</span>
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div className="border mb-5 mt-3"></div>
-
-        {/* Primary Color Selection */}
-        <div className="flex flex-row justify-between">
-          <div>
-            <h2 className={`text-lg mb-2 ${fontSizeClass[fontSize]}`}>
-              Primary Color
-            </h2>
-          </div>
-          <div className="flex space-x-4">
-            {["primary", "secondary", "accent"].map((colorOption) => (
-              <button
-                key={colorOption}
-                onClick={() => setColor(colorOption)}
-                className={`w-8 h-8 rounded-full border-2 ${
-                  color === colorOption ? "border-blue-500" : "border-gray-300"
-                }`}
-                style={{
-                  backgroundColor: colorOptions[colorOption],
-                }}
-              ></button>
-            ))}
-          </div>
-        </div>
-
-        <div className="border mb-5 mt-3"></div>
-
-        {/* Display Selected Primary Color as a Line */}
-        <div>
-          <h2 className={`text-lg mb-2 ${fontSizeClass[fontSize]}`}>
-            Selected Primary Color:
-          </h2>
-          <div
-            className="w-full h-4 rounded-md"
-            style={{ backgroundColor: colorOptions[color] }}
-          ></div>
-        </div>
+      {/* Tab Content */}
+      <div className="mt-6">
+        {activeTab === "outletInfo" && <OutletInfo />}
+        {activeTab === "technicianInfo" && <Technicians />}
+        {activeTab === "accounts" && <Accounts />}
+        {activeTab === "theme" && <Theme />}
       </div>
     </div>
   );

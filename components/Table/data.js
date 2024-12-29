@@ -107,6 +107,79 @@ export const sampleMotorbikeBookings = [
   },
 ];
 
+export const sampleRsaBookings = [
+  {
+    bookingId: "BK001",
+    customerName: "John Doe",
+    motorbikeModel: "Yamaha R15",
+    status: "Booked",
+    bookingDate: "2024-12-01",
+  },
+  {
+    bookingId: "BK002",
+    customerName: "Jane Smith",
+    motorbikeModel: "Honda CBR 600",
+    status: "Picked",
+    bookingDate: "2024-12-02",
+  },
+  {
+    bookingId: "BK003",
+    customerName: "Bill Gates",
+    motorbikeModel: "Kawasaki Ninja",
+    status: "Repairing",
+    bookingDate: "2024-12-03",
+  },
+  {
+    bookingId: "BK004",
+    customerName: "Elon Musk",
+    motorbikeModel: "Ducati Monster",
+    status: "Shipped",
+    bookingDate: "2024-12-04",
+  },
+  {
+    bookingId: "BK005",
+    customerName: "Mark Zuckerberg",
+    motorbikeModel: "BMW S1000RR",
+    status: "Completed",
+    bookingDate: "2024-12-05",
+  },
+  {
+    bookingId: "BK006",
+    customerName: "Alice Johnson",
+    motorbikeModel: "Suzuki GSX-R1000",
+    status: "Booked",
+    bookingDate: "2024-12-06",
+  },
+  {
+    bookingId: "BK007",
+    customerName: "Charlie Brown",
+    motorbikeModel: "Harley Davidson Sportster",
+    status: "Repairing",
+    bookingDate: "2024-12-07",
+  },
+  {
+    bookingId: "BK008",
+    customerName: "David Lee",
+    motorbikeModel: "Triumph Speed Triple",
+    status: "Shipped",
+    bookingDate: "2024-12-08",
+  },
+  {
+    bookingId: "BK009",
+    customerName: "Emma Watson",
+    motorbikeModel: "KTM Duke 390",
+    status: "Picked",
+    bookingDate: "2024-12-09",
+  },
+  {
+    bookingId: "BK010",
+    customerName: "Tom Hanks",
+    motorbikeModel: "Honda Africa Twin",
+    status: "Completed",
+    bookingDate: "2024-12-10",
+  },
+];
+
 export const remindersdata = [
   {
     customerId: "C001",

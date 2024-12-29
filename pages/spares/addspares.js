@@ -24,8 +24,13 @@ const AddSpares = ({ sparePart, handleInputChange, handleAddSpare }) => {
     // Log the new spare part data to the console
     console.log("New spare part added:", newSpareData);
 
-    // Show an alert to notify the user
-    alert("New spare part added successfully!");
+    // Convert object to a readable string
+    const spareDataString = Object.entries(newSpareData)
+      .map(([key, value]) => `${key}: ${value}`)
+      .join("\n");
+
+    // Show the alert
+    alert(`New spare part added successfully!\n\n${spareDataString}`);
 
     // Optionally, you can reset the form or leave it as it is
     setNewSpare(sparePart); // Reset the form
@@ -33,6 +38,14 @@ const AddSpares = ({ sparePart, handleInputChange, handleAddSpare }) => {
 
   return (
     <div className="space-y-4">
+      <div className="flex space-x-4">
+        <button
+          // onClick={}
+          className="border-dashed border-2 border-gray-300 p-4 mb-4 cursor-pointer"
+        >
+          Upload Spare Image
+        </button>
+      </div>
       <div className="flex space-x-4">
         <input
           type="text"
@@ -47,6 +60,25 @@ const AddSpares = ({ sparePart, handleInputChange, handleAddSpare }) => {
           name="name"
           placeholder="Spare Part Name"
           value={newSpare.name}
+          onChange={handleInputChangeForAdd}
+          className="flex-1 border border-gray-300 p-2 rounded-lg"
+        />
+      </div>
+
+      <div className="flex space-x-4">
+        <input
+          type="text"
+          name="brandspare"
+          placeholder="Select Brand"
+          value={newSpare.brand}
+          onChange={handleInputChangeForAdd}
+          className="flex-1 border border-gray-300 p-2 rounded-lg"
+        />
+        <input
+          type="text"
+          name="modelspare"
+          placeholder="Select Model"
+          value={newSpare.model}
           onChange={handleInputChangeForAdd}
           className="flex-1 border border-gray-300 p-2 rounded-lg"
         />

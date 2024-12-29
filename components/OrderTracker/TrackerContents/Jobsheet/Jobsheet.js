@@ -244,12 +244,18 @@ const Jobsheet = ({ id, orderId }) => {
   const [isWarranty, setIsWarranty] = useState(false);
   const [isInsurance, setIsInsurance] = useState(false);
   const [isEmission, setIsEmission] = useState(false);
+  const [oilBrand, SetOilBrand] = useState("");
+  const [oilEnabled, setOilEnabled] = useState(false); // Track if GST checkbox is enabled
+  const [showButtons, SetShowButton] = useState(false);
+  const engineoil = ["Motul", "Shell", "Waxpol"];
+  const [number, setNumber] = useState("9876543210"); // Example phone number
 
   // Handlers for form inputs
   const handleOdometerChange = (e) => setOdometerReading(e.target.value);
   const handleTechnicianChange = (value) => setAssignTechnician(value); // Update technician state
   const handleFuelChange = (e) => setFuelPercent(e.target.value);
   const handleCustomerVoiceChange = (e) => setCustomerVoice(e.target.value);
+  const handleOilChange = (e) => SetOilBrand(e.target.value);
 
   // Submit handler to collect and display form data
   const handleSubmit = (e) => {
@@ -263,6 +269,8 @@ const Jobsheet = ({ id, orderId }) => {
       fuelPercent,
       customerVoice,
       isPaid,
+      oilEnabled,
+      oilBrand,
       isWarranty,
       isInsurance,
       isEmission,
@@ -287,10 +295,14 @@ const Jobsheet = ({ id, orderId }) => {
     console.log(formData);
   };
 
+  const handlerdownloadjobsheet = (e) => {
+    SetShowButton(true);
+  };
+
   return (
     <div>
       <div className="flex space-x-8">
-        {/* <div className="w-1/2 mt-4">
+        <div className="w-1/2 mt-4">
           <InputField
             id="orderid"
             label="Order ID"
@@ -298,7 +310,7 @@ const Jobsheet = ({ id, orderId }) => {
             type="text"
             disabled
           />
-        </div> */}
+        </div>
         <div className="w-1/2 mt-4">
           <InputField
             id="jobsheetid"
@@ -399,6 +411,39 @@ const Jobsheet = ({ id, orderId }) => {
           </div>
         </div>
 
+        <div>
+          <div className="flex items-center">
+            <input
+              type="checkbox"
+              checked={oilEnabled}
+              onChange={() => setOilEnabled(!oilEnabled)}
+              id="enableGst"
+              className="mr-2"
+            />
+            <label htmlFor="enableGst">Need Engine Oil</label>
+          </div>
+          {oilEnabled && (
+            <div>
+              <select
+                id="oilBrand"
+                name="oilBrand"
+                value={oilBrand}
+                onChange={handleOilChange}
+                className="mt-1 block w-full rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
+              >
+                <option value="" disabled>
+                  Select Oil Brand
+                </option>
+                {engineoil.map((oil, index) => (
+                  <option key={index} value={oil}>
+                    {oil}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
+        </div>
+
         {/* Customer Voice */}
         <div className="mt-5">
           <label
@@ -451,9 +496,37 @@ const Jobsheet = ({ id, orderId }) => {
 
         {/* Submit Button */}
         <div className="mt-6">
-          <Button type="submit" color="green">
+          <Button type="submit" color="green" onClick={handlerdownloadjobsheet}>
             Submit Job Sheet
           </Button>
+          {/* Download & Share Buttons */}
+          {showButtons && (
+            <div className="mt-6 flex space-x-4">
+              <Button
+                color="blue"
+                variant="outlined"
+                href={`/jobsheet/${orderId}`} // Use orderId directly from props
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Download
+              </Button>
+
+              <Button
+                color="yellow"
+                variant="outlined"
+                onClick={() => {
+                  const shareText = `Hi Anush G,Thanks for choosing Spannerdoor!  Your Vehicle Reg No KA20EC1108 Jobsheet has been updated. Please download it from the link below: http://localhost:3001/jobsheet/BK001  Feel free to call us if you have any queries. Thank you!`;
+                  const shareUrl = `https://api.whatsapp.com/send?phone=${number}&text=${encodeURIComponent(
+                    shareText
+                  )}`;
+                  window.open(shareUrl, "_blank");
+                }}
+              >
+                Share
+              </Button>
+            </div>
+          )}
         </div>
       </form>
     </div>

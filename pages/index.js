@@ -99,26 +99,8 @@ export default function Home() {
             daterange={true} // Enable date range filter
           />
         </div>
-        <div className="mt-5 mb-5">
-          <OrderTracker orderId={orderId} />
-        </div>
-        <div className="mt-5 mb-5">
-          <Upload
-            uploadCount={5}
-            uploadType="service"
-            includeType="all"
-            // includeType="png,jpg"
-            excludeType="pdf"
-            onChange={(uploads) => console.log(uploads)}
-            errorMessage="Custom error message"
-          />
-        </div>
-        <div className="mt-5 mb-5">
-          <GetGoogleReview
-            googleReviewCode={googleReviewCode}
-            customerNumber={customerNumber}
-          />
-        </div>
+
+
 
         <QuotePreviewPage />
 

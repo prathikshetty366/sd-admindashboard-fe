@@ -62,7 +62,7 @@ const AllSpares = () => {
   return (
     <>
       <div className="flex flex-col gap-4">
-        <div className="flex space-x-3">
+        <div className="flex justify-end space-x-3">
           <button
             onClick={() => setIsAddModalOpen(true)} // Open the modal when clicked
             className="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"

@@ -8,6 +8,7 @@ function Button({
   children,
   onClick,
   href,
+  target,
   width,
   color = "blue", // Default to blue
   variant = "filled", // Can be 'filled' or 'outline'
@@ -54,6 +55,7 @@ function Button({
     return (
       <a
         href={href}
+        target={target || ""}
         className={classNames(
           `p-2 text-sm font-medium flex justify-center items-center ${widthClass}  ${buttonColor} rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2`,
           loading && "cursor-not-allowed"

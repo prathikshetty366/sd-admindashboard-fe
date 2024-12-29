@@ -1,61 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import OrderTracker from "@/components/OrderTracker/OrderTracker";
-import DataDisplay from "@/components/DataDisplay/DataDisplay";
+import Orderinfodisplay from "@/components/Orderinfodisplay/Orderinfodisplay";
 import Button from "@/components/Button/Button";
 import { ArrowRightIcon } from "@heroicons/react/20/solid";
 
 import Modal from "@/components/Modal/Modal"; // Assuming Modal is in the components folder
 import ReschedulePage from "./ReschedulePage"; // Import the ReschedulePage
+import Upload from "@/components/Upload/Upload";
 
 const OrderDetails = () => {
   const router = useRouter();
   const { id } = router.query; // Extract 'id' from the URL
-  const [orderDetails, setOrderDetails] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  //   // Fetch order details when the id is available
-  //   useEffect(() => {
-  //     if (!id) return; // Wait for the 'id' to be available
-
-  //     // const fetchOrderDetails = async () => {
-  //     //   try {
-  //     //     setLoading(true);
-  //     //     setError(null);
-
-  //     //     // Replace with your actual API endpoint
-  //     //     const response = await fetch(`/api/orders/${id}`);
-
-  //     //     if (!response.ok) {
-  //     //       throw new Error("Failed to fetch order details");
-  //     //     }
-
-  //     //     const data = await response.json();
-  //     //     setOrderDetails(data);
-  //     //   } catch (err) {
-  //     //     setError(err.message);
-  //     //   } finally {
-  //     //     setLoading(false);
-  //     //   }
-  //     // };
-
-  //     // fetchOrderDetails();
-  //   }, [id]);
-
-  //   if (loading) {
-  //     return <div>Loading...</div>;
-  //   }
-
-  //   if (error) {
-  //     return <div>Error: {error}</div>;
-  //   }
-
-  //   if (!orderDetails) {
-  //     return <div>No order details found.</div>;
-  //   }x
-
+  const [isOrderAccepted, setIsOrderAccepted] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleAcceptOrder = () => {
+    alert("Order Accepted"); // Show the alert
+    setIsOrderAccepted(true); // Set the order as accepted
+  };
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -68,7 +31,7 @@ const OrderDetails = () => {
   return (
     <>
       <div className="flex justify-between flex-row mb-5">
-        <div className="flex space-x-4">
+        <div className="flex space-x-3">
           <div>
             <h2 className="font-bold text-[24px]">Order ID : 678678</h2>
           </div>
@@ -93,7 +56,7 @@ const OrderDetails = () => {
             variant="filled"
             icon={ArrowRightIcon}
             iconPosition="right"
-            onClick={() => console.log("Order Accepted")}
+            onClick={handleAcceptOrder}
           >
             Accept Order
           </Button>
@@ -109,9 +72,27 @@ const OrderDetails = () => {
         <ReschedulePage onClose={closeModal} />
       </Modal>
 
-      <DataDisplay />
-      <div className="mt-5 mb-5">
-        <OrderTracker orderId={id} />
+      <Orderinfodisplay />
+      {isOrderAccepted && (
+        <div className="mt-5 mb-5">
+          <OrderTracker orderId={id} />
+        </div>
+      )}
+
+      <div>
+        <hr />
+        <h2 className="p-5 font-bold">
+          Images regarding this service (Optional)
+        </h2>
+        <Upload
+          uploadCount={5}
+          uploadType="service"
+          includeType="all"
+          // includeType="png,jpg"
+          excludeType="pdf"
+          onChange={(uploads) => console.log(uploads)}
+          errorMessage="Custom error message"
+        />
       </div>
     </>
   );

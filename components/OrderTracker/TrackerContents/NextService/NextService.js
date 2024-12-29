@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import CustomDatePicker from "./../../../Datepicker/Datepicker"; // Import your datepicker component
 import { format } from "date-fns"; // For formatting the date
+import GetGoogleReview from "@/components/GetGoogleReview/GetGoogleReview";
 
 const NextService = () => {
   const [nextServiceDate, setNextServiceDate] = useState(null); // Single date for next service
@@ -16,6 +17,9 @@ const NextService = () => {
     serviceSticker: true,
     forkSticker: true,
   });
+
+  const googleReviewCode = "CeOlLmnRDVOuEBM";
+  const customerNumber = "917019864767";
 
   const [reason, setReason] = useState(""); // Reason for missing checkbox task
   const [isReasonVisible, setIsReasonVisible] = useState(false); // Flag for showing reason input
@@ -242,6 +246,12 @@ const NextService = () => {
           </button>
         </div>
       </form>
+      <div className="mt-5 mb-5">
+        <GetGoogleReview
+          googleReviewCode={googleReviewCode}
+          customerNumber={customerNumber}
+        />
+      </div>
     </>
   );
 };
