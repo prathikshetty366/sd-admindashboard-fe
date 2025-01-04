@@ -49,13 +49,13 @@ function ApplicationLayout({ children }) {
       >
         {/* Top Bar */}
         <div className="flex items-center justify-between bg-white p-4 shadow-md">
-          <CommandPalette />
-          <div className="flex items-center space-x-8 px-10">
+          {/* <CommandPalette /> */}
+          {/* <div className="flex items-center space-x-8 px-10">
             <div className="w-[100px]">
               <Dropdown options={options} />
             </div>
             <NotificationIcon />
-          </div>
+          </div> */}
         </div>
 
         {/* Content */}

@@ -1,38 +1,122 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import TableTab from "@/components/Table/TableTab";
-import { sampleMotorbikeBookings } from "@/components/Table/data"; // Assuming the data is available
+import { fetchAllGarages, fetchAllServices } from "@/app/services/service";
 
 const Orders = () => {
-  // Dynamically get the headers from the first object in the sampleMotorbikeBookings array
-  const headers =
-    sampleMotorbikeBookings.length > 0
-      ? Object.keys(sampleMotorbikeBookings[0])
-      : [];
+  const [loading, setLoading] = useState(true);
+  const [garages, setGarages] = useState([]);
+  const [bookings, setBookings] = useState([]);
 
-  // Extract the 'status' values
-  const statusList = sampleMotorbikeBookings.map((booking) => booking.status);
+  const [pagination, setPagination] = useState({
+    page: 1,
+    limit: 10,
+    totalPages: 0,
+  });
+  const [statistics, setStatistics] = useState({}); // Storing the statistics data
+  const [garageId, setGarageId] = useState(null);
 
-  // Get unique status values using Set
+  const [search, setSearch] = useState("");
+  const [status, setStatus] = useState("");
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+
+  // Fetch services including statistics
+  const fetchServices = async () => {
+    try {
+      const services = await fetchAllServices(
+        pagination.page,
+        pagination.limit,
+        garageId,
+        startDate,
+        endDate,
+        search,
+        status
+      );
+
+      const mappedBookings = services?.data?.bookings.map((booking) => {
+        let finalStatus = booking.serviceHistory?.[booking.serviceHistory.length - 1]?.serviceStatus || "";
+        return {
+          bookingId: booking.id,
+          "Customer Name": booking.contactName,
+          "License Plate": booking.vehicle?.licensePlate,
+          "Scheduled Date": booking.serviceScheduledDate,
+          "Contact": booking.contact,
+          "Garage Name": booking.garage?.name,
+          status: finalStatus, 
+        };
+      }) || [];
+
+      setBookings(mappedBookings);
+      setStatistics(services?.data?.statistics || {}); // Set statistics from API response
+      setPagination((prev) => ({
+        ...prev,
+        totalPages: services.data.pagination?.totalPages || 0,
+      }));
+
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching services:", error);
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchServices();
+  }, [pagination.page, pagination.limit, garageId, startDate, endDate, search, status]);
+
+  const headers = [
+    "Customer Name",
+    "License Plate",
+    "Scheduled Date",
+    "Contact",
+    "Garage Name",
+  ];
+
+  const statusList = [
+    "booked",
+    "accepted",
+    "picked",
+    "repairing",
+    "billing",
+    "readyToDeliver",
+    "delivered",
+    "cancelled",
+  ];
   const uniqueStatuses = ["All", ...new Set(statusList)];
 
-  console.log(uniqueStatuses);
+  const totalCount = Object.values(statistics).reduce((sum, count) => sum + count, 0);
 
+const onClearAllFilters=()=>{
+  setStatus("")
+
+}
   return (
-    <>
-      <div>
-        {/* TableTab Section */}
-        <div className="mb-5">
-          <TableTab
-            title="Orders"
-            headers={headers} // Passing the dynamically generated headers
-            data={sampleMotorbikeBookings}
-            daterange={true}
-            tabs={uniqueStatuses}
-            dateField="bookingDate"
+    <div>
+      <div className="mb-5">
+        <TableTab
+          title="Orders"
+          headers={headers}
+          data={bookings}
+          daterange={true}
+          dateField="Scheduled Date"
+          tabs={uniqueStatuses}
+          tabFilterCol="status"
+          searchValue={search}
+          onSearchChange={setSearch}
+          activeTab={status === "" ? "All" : status}
+          onTabChange={setStatus}
+          startDate={startDate}
+          endDate={endDate}
+          onStartDateChange={setStartDate}
+          onEndDateChange={setEndDate}
+          currentPage={pagination.page}
+          totalPages={pagination.totalPages}
+          onPageChange={(page) => setPagination({ ...pagination, page })}
+          statistics={{ ...statistics, all: totalCount }}  
+          onClearAllFilters={onClearAllFilters}
           />
-        </div>
       </div>
-    </>
+    </div>
   );
 };
 

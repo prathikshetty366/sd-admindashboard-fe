@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
+import {_clearAuthCookies} from "@/utils/cookies"
 
 export default function Sidebar({ navigation, collapsed, toggleCollapse }) {
   const [openAccordions, setOpenAccordions] = useState({});
@@ -51,12 +52,19 @@ export default function Sidebar({ navigation, collapsed, toggleCollapse }) {
 
   // Handle item click to expand or redirect
   const handleItemClick = (href, name, sublinks) => {
+    console.log(href,">>>>>>>>")
     if (collapsed) {
       // If collapsed, first expand the sidebar and then either show sublinks or navigate
       toggleCollapse(); // Collapse or expand the sidebar
       if (sublinks) {
         toggleAccordion(name); // If the item has sublinks, toggle accordion
-      } else {
+      }else if(href=="/login"){
+        _clearAuthCookies("accessToken")
+        window.localStorage.clear()
+        router.push(href); // Navigate directly
+
+      }
+       else {
         // If no sublinks, navigate directly after the sidebar expands
         setTimeout(() => router.push(href), 300); // Delay navigation slightly to allow expansion
       }
@@ -64,7 +72,13 @@ export default function Sidebar({ navigation, collapsed, toggleCollapse }) {
       // If sidebar is expanded, handle accordion for sublinks or redirect
       if (sublinks) {
         toggleAccordion(name); // Toggle sublink visibility
-      } else {
+      } else if(href=="/login"){
+        _clearAuthCookies("accessToken")
+        window.localStorage.clear()
+        router.push(href); // Navigate directly
+
+      }
+      else {
         router.push(href); // Navigate directly
       }
     }

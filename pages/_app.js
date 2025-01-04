@@ -7,9 +7,25 @@ import { ThemeProvider } from "@/context/ThemeContext";
 import { store, persistor } from "@/app/store/index"; // Import your store and persistor
 import { Provider } from "react-redux"; // Import Redux Provider
 import { PersistGate } from "redux-persist/integration/react"; // Import PersistGate to load persisted state
-import { isAuthenticated } from "@/utils/cookies";
+import { isAuthenticated } from "@/utils/auth";
+import { useEffect } from "react";
+import { usePathname } from "next/navigation";
+import { useRouter } from "next/router";
 
 function App({ Component, pageProps }) {
+  const pathname = usePathname();
+  const router = useRouter();
+  useEffect(() => {
+    // Redirect to login if not authenticated and not already on the login page
+    if (!isAuthenticated() && pathname !== "/login") {
+      router.push("/login");
+    }
+
+    // Redirect authenticated users from login to the home page
+    if (isAuthenticated() && pathname === "/login") {
+      router.push("/orders");
+    }
+  }, [pathname, router]);
   return (
     <>
       <Head>

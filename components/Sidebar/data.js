@@ -70,4 +70,9 @@ export const navigation = [
     href: "/holiday",
     icon: SunIcon,
   },
+  {
+    name: "Log Out",
+    href: "/login",
+    icon: ClipboardDocumentIcon,
+  },
 ];
