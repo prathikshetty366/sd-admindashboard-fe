@@ -7,7 +7,11 @@ import { ArrowRightIcon, ArrowLeftIcon } from "@heroicons/react/20/solid"; // Im
 import Modal from "@/components/Modal/Modal";
 import ReschedulePage from "./ReschedulePage";
 import Upload from "@/components/Upload/Upload";
-import { fetchServiceDetailsById, updateServiceStatus } from "@/app/services/service";
+import {
+  fetchServiceDetailsById,
+  updateServiceStatus,
+  cancelServiceBooking,
+} from "@/app/services/service";
 import { toast } from "react-toastify"; // Assuming toast is used for notifications
 
 const OrderDetails = () => {
@@ -27,8 +31,9 @@ const OrderDetails = () => {
     { id: 4, name: "repairing" },
     { id: 5, name: "billing" },
     { id: 6, name: "readyToDeliver" },
-    { id: 7, name: "delivered" }
+    { id: 7, name: "delivered" },
   ];
+  const cancellableStatuses = ["booked", "accepted", "picked"];
 
   useEffect(() => {
     if (id) {
@@ -44,8 +49,11 @@ const OrderDetails = () => {
       const response = await fetchServiceDetailsById(id);
       if (response.success) {
         setServiceInfo(response.data);
-        const mostRecent = response.data.serviceHistory.reduce((latest, current) =>
-          new Date(latest.createdAt) > new Date(current.createdAt) ? latest : current
+        const mostRecent = response.data.serviceHistory.reduce(
+          (latest, current) =>
+            new Date(latest.createdAt) > new Date(current.createdAt)
+              ? latest
+              : current
         );
         setRecentStatus(mostRecent);
         filterOptions(mostRecent.serviceStatus);
@@ -57,7 +65,9 @@ const OrderDetails = () => {
 
   // Disable previous statuses and allow only the next
   const filterOptions = (currentStatus) => {
-    const currentIndex = options.findIndex(option => option.name === currentStatus);
+    const currentIndex = options.findIndex(
+      (option) => option.name === currentStatus
+    );
     if (currentIndex !== -1 && currentIndex < options.length - 1) {
       setFilteredOptions([options[currentIndex + 1]]);
     } else {
@@ -84,6 +94,30 @@ const OrderDetails = () => {
     router.push("/orders");
   };
 
+  const handleCancelOrder = async () => {
+    if (!cancellableStatuses.includes(recentStatus.serviceStatus)) {
+      toast.warning("Order is not eligible for cancellation.");
+      return;
+    }
+    if (!id) {
+      toast.error("Invalid service ID.");
+      return;
+    }
+    try {
+      const response = await cancelServiceBooking(id);
+      if (response.success) {
+        toast.success("Order cancelled successfully.");
+        fetchServiceInfoById(); // Refresh the order details after cancel
+      } else {
+        toast.error(response.message || "Failed to cancel the order.");
+      }
+    } catch (error) {
+      toast.error("Error while canceling the order.");
+      console.log("Error:", error);
+    }
+  };
+  console.log(recentStatus.serviceStatus?.toUpperCase(), ">>>>>>>>>>>");
+
   return (
     <>
       <div className="flex justify-between flex-row mb-5">
@@ -98,10 +132,20 @@ const OrderDetails = () => {
         </Button>
 
         {/* Order ID Display */}
-        <h2 className="font-bold text-[24px]">Order ID: {serviceInfo.serviceNumber}</h2>
+        <h2 className="font-bold text-[24px]">
+          Order ID: {serviceInfo.serviceNumber}
+        </h2>
 
         {/* Action Buttons */}
         <div className="flex space-x-3">
+          {cancellableStatuses.includes(
+            recentStatus.serviceStatus?.toLowerCase()
+          ) && (
+            <Button color="red" variant="outline" onClick={handleCancelOrder}>
+              Cancel Order
+            </Button>
+          )}
+
           {/* Reschedule Button */}
           <Button color="blue" variant="outline">
             {recentStatus.serviceStatus?.toUpperCase()}
@@ -127,7 +171,11 @@ const OrderDetails = () => {
       </div>
 
       {/* Modal for Rescheduling */}
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Reschedule Appointment">
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        title="Reschedule Appointment"
+      >
         <ReschedulePage onClose={() => setIsModalOpen(false)} />
       </Modal>
 

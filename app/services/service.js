@@ -76,7 +76,6 @@ export const fetchServiceDetailsById = async (serviceId) => {
 };
 
 export const updateServiceStatus = async ({ id, serviceStatus }) => {
-  console.log(id, serviceStatus, "::::::::::::");
   try {
     const response = await axios.put(
       `${process.env.NEXT_PUBLIC_ADMIN_BACKEND}/app/updateServiceStatus`,
@@ -132,5 +131,26 @@ export const generateJobsheetPdf = async (payload) => {
     return response; // Return response data
   } catch (error) {
     throw error; // Throw the error to propagate it to the caller
+  }
+};
+
+
+export const cancelServiceBooking = async (serviceId) => {
+  try {
+    const response = await axios.put(
+      `${process.env.NEXT_PUBLIC_LOGIN_URL}/service/cancelServiceBooking`,
+      null,  // No body required as per your provided curl request
+      {
+        params: { serviceId }, // Sending serviceId as a query parameter
+        headers: {
+          accept: "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error canceling service booking:", error);
+    throw error;
   }
 };

@@ -3,7 +3,6 @@ import TableTab from "@/components/Table/TableTab";
 import { fetchAllGarages, fetchAllServices } from "@/app/services/service";
 import { format } from "date-fns"; // Import date-fns for formatting
 
-
 const Orders = () => {
   const [loading, setLoading] = useState(true);
   const [garages, setGarages] = useState([]);
@@ -25,39 +24,47 @@ const Orders = () => {
   // Fetch services including statistics
   const fetchServices = async () => {
     try {
+      const formattedStartDate = startDate
+        ? format(startDate, "yyyy-MM-dd")
+        : null;
+      const formattedEndDate = endDate ? format(endDate, "yyyy-MM-dd") : null;
       const services = await fetchAllServices(
         pagination.page,
         pagination.limit,
         garageId,
-        startDate,
-        endDate,
+        formattedStartDate,
+        formattedEndDate,
         search,
         status
       );
 
-      const mappedBookings = services?.data?.bookings.map((booking) => {
-        let finalStatus = booking.serviceHistory?.[booking.serviceHistory.length - 1]?.serviceStatus || "";
-        const formattedDate = booking.serviceScheduledDate
-        ? format(new Date(booking.serviceScheduledDate), "yyyy-MMM-dd")
-        : "N/A";
-        return {
-          bookingId: booking.id,
-          "Customer Name": booking.contactName,
-          "License Plate": booking.vehicle?.licensePlate,
-          "Scheduled Date": formattedDate,
-          "Contact": booking.contact,
-          "Garage Name": booking.garage?.name,
-          status: finalStatus, 
-        };
-      }) || [];
+      const mappedBookings =
+        services?.data?.bookings.map((booking) => {
+          let finalStatus =
+            booking.serviceHistory?.[booking.serviceHistory.length - 1]
+              ?.serviceStatus || "";
+          const formattedDate = booking.serviceScheduledDate
+            ? format(new Date(booking.serviceScheduledDate), "yyyy-MM-dd")
+            : "N/A";
+
+          return {
+            bookingId: booking.id,
+            "Customer Name": booking.contactName,
+            "License Plate": booking.vehicle?.licensePlate,
+            "Scheduled Date": formattedDate,
+            Contact: booking.contact,
+            "Garage Name": booking.garage?.name,
+            Slot: booking.selectedSlot,
+            status: finalStatus,
+          };
+        }) || [];
 
       setBookings(mappedBookings);
-      setStatistics(services?.data?.statistics || {}); // Set statistics from API response
+      setStatistics(services?.data?.statistics || {});
       setPagination((prev) => ({
         ...prev,
         totalPages: services.data.pagination?.totalPages || 0,
       }));
-
       setLoading(false);
     } catch (error) {
       console.error("Error fetching services:", error);
@@ -74,15 +81,23 @@ const Orders = () => {
       }));
       setGarages(filteredOptions);
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Error:", error);
     }
   };
-useEffect(()=>{
- fetchGarages() 
-},[])
+  useEffect(() => {
+    fetchGarages();
+  }, []);
   useEffect(() => {
     fetchServices();
-  }, [pagination.page, pagination.limit, garageId, startDate, endDate, search, status]);
+  }, [
+    pagination.page,
+    pagination.limit,
+    garageId,
+    startDate,
+    endDate,
+    search,
+    status,
+  ]);
 
   const headers = [
     "Customer Name",
@@ -90,6 +105,7 @@ useEffect(()=>{
     "Scheduled Date",
     "Contact",
     "Garage Name",
+    "Slot",
   ];
 
   const statusList = [
@@ -104,7 +120,10 @@ useEffect(()=>{
   ];
   const uniqueStatuses = ["All", ...new Set(statusList)];
 
-  const totalCount = Object.values(statistics).reduce((sum, count) => sum + count, 0);
+  const totalCount = Object.values(statistics).reduce(
+    (sum, count) => sum + count,
+    0
+  );
 
   const onClearAllFilters = () => {
     setStatus("");
@@ -135,11 +154,11 @@ useEffect(()=>{
           currentPage={pagination.page}
           totalPages={pagination.totalPages}
           onPageChange={(page) => setPagination({ ...pagination, page })}
-          statistics={{ ...statistics, all: totalCount }}  
+          statistics={{ ...statistics, all: totalCount }}
           onClearAllFilters={onClearAllFilters}
-          garages={garages}   // Pass garages to the child component
+          garages={garages} // Pass garages to the child component
           onGarageChange={setGarageId} // Callback for garage selection
-          />
+        />
       </div>
     </div>
   );
