@@ -45,6 +45,8 @@ export default function TableTab({
   onStartDateChange,
   onEndDateChange,
   onClearAllFilters,
+  garages = [], // Added for garage selection
+  onGarageChange, 
 
   // Pagination props
   currentPage,    // e.g. 1
@@ -138,6 +140,8 @@ export default function TableTab({
       {/* Header Row */}
       <div className="flex flex-row justify-between">
         <h2 className="text-xl font-semibold mb-4">{title}</h2>
+
+        
         <div className="flex items-center space-x-3">
           <Button
             onClick={() => downloadCSV(filteredData, headers, csvFilename)}
@@ -179,7 +183,7 @@ export default function TableTab({
           onChange={(e) => onSearchChange(e.target.value)}
         />
 
-        {/* {daterange && (
+        {daterange && (
           <div className="flex ml-4 items-center">
             <DatePicker
               selected={startDate}
@@ -197,9 +201,21 @@ export default function TableTab({
               dateFormat="yyyy-MM-dd"
             />
           </div>
-        )} */}
+        )}
 
         {/* Clear Button */}
+      
+         <select
+          className="border px-3 py-2 rounded-md focus:outline-indigo-600"
+          onChange={(e) => onGarageChange(e.target.value)}
+        >
+          <option value="">All Garages</option>
+          {garages.map((garage) => (
+            <option key={garage.garageId} value={garage.garageId}>
+              {garage.name}
+            </option>
+          ))}
+        </select>
         <button
           onClick={handleClearFiltersClick}
           className="ml-4 text-blue-600 hover:text-blue-800 p-2"

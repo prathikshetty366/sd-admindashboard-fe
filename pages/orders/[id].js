@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import OrderTracker from "@/components/OrderTracker/OrderTracker";
 import Orderinfodisplay from "@/components/Orderinfodisplay/Orderinfodisplay";
 import Button from "@/components/Button/Button";
-import { ArrowRightIcon } from "@heroicons/react/20/solid";
+import { ArrowRightIcon, ArrowLeftIcon } from "@heroicons/react/20/solid"; // Importing back arrow icon
 import Modal from "@/components/Modal/Modal";
 import ReschedulePage from "./ReschedulePage";
 import Upload from "@/components/Upload/Upload";
@@ -54,7 +54,6 @@ const OrderDetails = () => {
       console.log(error);
     }
   };
-  console.log(recentStatus,"?>???????????")
 
   // Disable previous statuses and allow only the next
   const filterOptions = (currentStatus) => {
@@ -80,9 +79,24 @@ const OrderDetails = () => {
     }
   };
 
+  // Handle Back Button Click - Redirect to /orders
+  const handleBackClick = () => {
+    router.push("/orders");
+  };
+
   return (
     <>
       <div className="flex justify-between flex-row mb-5">
+        {/* Back Button */}
+        <Button
+          color="gray"
+          variant="outline"
+          icon={ArrowLeftIcon}
+          onClick={handleBackClick}
+        >
+          Back
+        </Button>
+
         {/* Order ID Display */}
         <h2 className="font-bold text-[24px]">Order ID: {serviceInfo.serviceNumber}</h2>
 
@@ -90,7 +104,7 @@ const OrderDetails = () => {
         <div className="flex space-x-3">
           {/* Reschedule Button */}
           <Button color="blue" variant="outline">
-            {recentStatus.serviceStatus}
+            {recentStatus.serviceStatus?.toUpperCase()}
           </Button>
 
           {/* Accept Order Button based on Sequential Status Flow */}
@@ -127,8 +141,8 @@ const OrderDetails = () => {
         </div>
       )}
 
-      {/* Image Upload Section */}
-      <div>
+      {/* Image Upload Section (Commented as per the requirement) */}
+      {/* <div>
         <hr />
         <h2 className="p-5 font-bold">Images regarding this service (Optional)</h2>
         <Upload
@@ -138,7 +152,7 @@ const OrderDetails = () => {
           excludeType="pdf"
           onChange={(uploads) => console.log(uploads)}
         />
-      </div>
+      </div> */}
     </>
   );
 };

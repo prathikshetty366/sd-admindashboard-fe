@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import TableTab from "@/components/Table/TableTab";
 import { fetchAllGarages, fetchAllServices } from "@/app/services/service";
+import { format } from "date-fns"; // Import date-fns for formatting
+
 
 const Orders = () => {
   const [loading, setLoading] = useState(true);
@@ -35,11 +37,14 @@ const Orders = () => {
 
       const mappedBookings = services?.data?.bookings.map((booking) => {
         let finalStatus = booking.serviceHistory?.[booking.serviceHistory.length - 1]?.serviceStatus || "";
+        const formattedDate = booking.serviceScheduledDate
+        ? format(new Date(booking.serviceScheduledDate), "yyyy-MMM-dd")
+        : "N/A";
         return {
           bookingId: booking.id,
           "Customer Name": booking.contactName,
           "License Plate": booking.vehicle?.licensePlate,
-          "Scheduled Date": booking.serviceScheduledDate,
+          "Scheduled Date": formattedDate,
           "Contact": booking.contact,
           "Garage Name": booking.garage?.name,
           status: finalStatus, 
@@ -60,6 +65,21 @@ const Orders = () => {
     }
   };
 
+  const fetchGarages = async () => {
+    try {
+      const response = await fetchAllGarages();
+      const filteredOptions = response.data.map((garage) => ({
+        garageId: garage.id,
+        name: garage.name,
+      }));
+      setGarages(filteredOptions);
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+useEffect(()=>{
+ fetchGarages() 
+},[])
   useEffect(() => {
     fetchServices();
   }, [pagination.page, pagination.limit, garageId, startDate, endDate, search, status]);
@@ -86,10 +106,13 @@ const Orders = () => {
 
   const totalCount = Object.values(statistics).reduce((sum, count) => sum + count, 0);
 
-const onClearAllFilters=()=>{
-  setStatus("")
-
-}
+  const onClearAllFilters = () => {
+    setStatus("");
+    setGarageId(null); // Reset garage filter
+    setSearch("");
+    setStartDate(null);
+    setEndDate(null);
+  };
   return (
     <div>
       <div className="mb-5">
@@ -114,6 +137,8 @@ const onClearAllFilters=()=>{
           onPageChange={(page) => setPagination({ ...pagination, page })}
           statistics={{ ...statistics, all: totalCount }}  
           onClearAllFilters={onClearAllFilters}
+          garages={garages}   // Pass garages to the child component
+          onGarageChange={setGarageId} // Callback for garage selection
           />
       </div>
     </div>
