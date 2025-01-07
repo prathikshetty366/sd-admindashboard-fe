@@ -165,7 +165,7 @@ export default function TableTab({
                 ? "bg-blue-600 text-white"
                 : "bg-white border border-blue-600 text-blue-600"
             }`}
-            onClick={() => onTabChange(tab)}
+            onClick={() => onTabChange(tab=="All"?"":tab)}
           >
         {tab} ({statistics[tab.toLowerCase()] || 0}) {/* Now includes the sum for "All" */}
         </button>
